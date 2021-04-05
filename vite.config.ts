@@ -1,10 +1,19 @@
-import { defineConfig } from "vite";
-import reactRefresh from "@vitejs/plugin-react-refresh";
+import { defineConfig } from 'vite'
+import reactRefresh from '@vitejs/plugin-react-refresh'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [reactRefresh()],
   server: {
     port: 8082,
   },
-});
+  css: {
+    modules: {
+      generateScopedName: '[local]_[hash:base64:5]',
+    },
+  },
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
+})
