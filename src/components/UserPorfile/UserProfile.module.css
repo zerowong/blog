@@ -1,6 +1,49 @@
 .avatar {
+  display: block;
   border-radius: 50%;
   width: 40px;
   height: 40px;
   cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.avatar:hover {
+  transform: scale3d(1.5, 1.5, 1.5) translateY(10px);
+}
+
+.avatar-active {
+  transform: scale3d(1.5, 1.5, 1.5) translateY(10px);
+  visibility: hidden;
+}
+
+.popup-modal-override {
+  padding: 0 !important;
+  border: none !important;
+}
+
+.content {
+  padding-top: 30px;
+  width: 150px;
+}
+
+.popup-avatar {
+  position: absolute;
+  top: -30px;
+  left: calc(50% - 30px);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.popup-name {
+  text-align: center;
+}
+
+.menu-item {
+  font-size: large;
+}
+
+.menu-item-text {
+  margin-left: 10px;
 }

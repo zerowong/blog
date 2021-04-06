@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
-import Icon from '@/components/Icon/Icon'
+import MyIcon from '@/components/MyIcon/MyIcon'
 import useUser from '@/hooks/useUser'
 import classes from './NavLinks.module.css'
 
@@ -17,7 +17,7 @@ export default function NavLinks() {
   const user = useUser()
 
   useEffect(() => {
-    if (user?.role === 'admin') {
+    if (user.value?.role === 'admin') {
       setRouteMap((prev) => [...prev, { to: '/manager', name: '后台', key: 'manager' }])
     } else {
       setRouteMap((prev) => {
@@ -39,7 +39,7 @@ export default function NavLinks() {
           className={`${classes['nav-link']} ${classes[`nav-link-${route.key}`]}`}
           activeClassName={classes[`nav-link-${route.key}-active`]}
         >
-          <Icon
+          <MyIcon
             name={route.key}
             iconfontClassName={classes['iconfont']}
             className={classes[`icon-${route.key}`]}

@@ -10,7 +10,7 @@ interface IconProps {
 /**
  * iconfont组件
  */
-export default function Icon(props: IconProps) {
+export default function MyIcon(props: IconProps) {
   return (
     <svg className={`iconfont ${props.iconfontClassName ?? ''}`} aria-hidden>
       <use xlinkHref={`#icon-${props.name}`} style={props.style} className={props.className}></use>
