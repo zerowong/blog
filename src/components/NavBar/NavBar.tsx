@@ -17,7 +17,12 @@ export default function NavBar() {
         ApassEr
       </a>
       <NavLinks />
-      <div>{user.value ? <UserProfile user={user} /> : <PassportModal />}</div>
+      <div className={user.value ? undefined : 'hidden'}>
+        <UserProfile user={user} />
+      </div>
+      <div className={user.value ? 'hidden' : undefined}>
+        <PassportModal />
+      </div>
     </nav>
   )
 }
