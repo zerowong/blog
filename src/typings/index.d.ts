@@ -7,3 +7,8 @@ export interface User {
   readonly lastActiveAt: string
   readonly role: 'admin' | 'normal'
 }
+
+export interface UserContextType {
+  value: User | null
+  dispatch: (action: 'fetch' | 'reset') => Promise<void>
+}

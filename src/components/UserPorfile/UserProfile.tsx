@@ -1,19 +1,27 @@
 import React, { useState } from 'react'
 import { Popup, Menu } from 'semantic-ui-react'
 import classes from './UserProfile.module.css'
-import type { User } from '@/typings'
+import type { UserContextType } from '@/typings'
 import MyIcon from '@/components/MyIcon/MyIcon'
 
 interface UserPorfileProps {
-  user: User
+  user: UserContextType
 }
 
 export default function UserProfile(props: UserPorfileProps) {
+  const { value: user, dispatch } = props.user
+
   const [avatarClassNames, setAvatarClassNames] = useState(classes['avatar'])
 
   const items = [
-    { name: 'user', text: '个人中心', clickHandler: () => console.log('foo') },
-    { name: 'signout', text: '退出', clickHandler: () => console.log('bar') },
+    {
+      name: 'user',
+      text: '个人中心',
+      clickHandler: () => {
+        /** todo */
+      },
+    },
+    { name: 'signout', text: '退出', clickHandler: () => dispatch('reset') },
   ]
 
   const handleOpen = () => {
@@ -27,11 +35,7 @@ export default function UserProfile(props: UserPorfileProps) {
   return (
     <Popup
       trigger={
-        <img
-          src={props.user.avatar}
-          alt={`${props.user.name}'s avatar`}
-          className={avatarClassNames}
-        />
+        <img src={user?.avatar} alt={`${user?.name}'s avatar`} className={avatarClassNames} />
       }
       basic
       hoverable
@@ -46,12 +50,12 @@ export default function UserProfile(props: UserPorfileProps) {
     >
       <>
         <img
-          src={props.user.avatar}
-          alt={`${props.user.name}'s avatar`}
+          src={user?.avatar}
+          alt={`${user?.name}'s avatar`}
           className={classes['popup-avatar']}
         />
         <div className={classes['content']}>
-          <h2 className={classes['popup-name']}>{props.user.name}</h2>
+          <h2 className={classes['popup-name']}>{user?.name}</h2>
           <Menu vertical secondary fluid compact>
             {items.map((item) => (
               <Menu.Item key={item.name} name={item.name} onClick={item.clickHandler}>

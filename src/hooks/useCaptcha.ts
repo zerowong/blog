@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 interface CaptchaRespose {
   // 验证结果，0：验证成功。2：用户主动关闭验证码
   ret: 0 | 2
@@ -33,8 +31,6 @@ declare class TencentCaptcha {
  * @returns 验证码对象
  */
 export default function useCaptcha(callback: CaptchaCallback) {
-  const captcha = useMemo(() => {
-    return new TencentCaptcha('2054543757', callback)
-  }, [callback])
+  const captcha = new TencentCaptcha('2054543757', callback)
   return captcha
 }

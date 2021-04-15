@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import classes from './NavBar.module.css'
 import NavLinks from '@/components/NavLinks/NavLinks'
 import PassportModal from '@/components/Passport/Passport'
@@ -10,9 +10,6 @@ import useUser from '@/hooks/useUser'
  */
 export default function NavBar() {
   const user = useUser()
-  const profileOrPassport = useMemo(() => {
-    return user.value ? <UserProfile user={user.value} /> : <PassportModal />
-  }, [user.value])
 
   return (
     <nav className={classes['nav-bar']}>
@@ -20,7 +17,7 @@ export default function NavBar() {
         ApassEr
       </a>
       <NavLinks />
-      <div>{profileOrPassport}</div>
+      <div>{user.value ? <UserProfile user={user} /> : <PassportModal />}</div>
     </nav>
   )
 }

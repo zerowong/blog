@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Form, Button } from 'semantic-ui-react'
+import { toast } from 'react-toastify'
 import useCaptcha from '@/hooks/useCaptcha'
 import useInputChangeHandler from '@/hooks/useInputChangeHandler'
 import useUser from '@/hooks/useUser'
@@ -28,7 +29,7 @@ export default function SignInForm(props: SignInFormProps) {
           pass: password,
         })
         await user.dispatch('fetch')
-        console.log(signInRes.message)
+        toast.success(signInRes.message)
         setLoading(false)
         props.closeModal()
       } catch {
@@ -37,12 +38,10 @@ export default function SignInForm(props: SignInFormProps) {
     }
   })
 
-  const handleInputChange = useInputChangeHandler(
-    new Map([
-      ['email', setEmail],
-      ['password', setPassword],
-    ])
-  )
+  const handleInputChange = useInputChangeHandler({
+    email: setEmail,
+    password: setPassword,
+  })
 
   const handleSignIn = () => {
     captcha.show()

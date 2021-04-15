@@ -1,15 +1,10 @@
-import { useCallback } from 'react'
-
 /**
  * input元素的ChangeEventHandler钩子
- * @param items Map<'xxx', setXxx>
- * @returns onChange时间回调函数
+ * @param items Record<'xxx', setXxx>
+ * @returns onChange回调函数
  */
-export default function useInputChangeHandler(items: Map<string, (newVal: string) => void>) {
-  return useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      items.get(event.target.name)?.(event.target.value)
-    },
-    [items]
-  )
+export default function useInputChangeHandler(items: Record<string, (newVal: string) => void>) {
+  return (event: React.ChangeEvent<HTMLInputElement>) => {
+    items[event.target.name](event.target.value)
+  }
 }

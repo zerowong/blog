@@ -1,6 +1,6 @@
 import React from 'react'
 
-interface IconProps {
+interface MyIconProps {
   name: string
   className?: string
   style?: React.CSSProperties
@@ -10,7 +10,7 @@ interface IconProps {
 /**
  * iconfont组件
  */
-export default function MyIcon(props: IconProps) {
+export default function MyIcon(props: MyIconProps) {
   return (
     <svg className={`iconfont ${props.iconfontClassName ?? ''}`} aria-hidden>
       <use xlinkHref={`#icon-${props.name}`} style={props.style} className={props.className}></use>

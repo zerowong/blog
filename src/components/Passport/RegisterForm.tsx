@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Form, Button } from 'semantic-ui-react'
+import { toast } from 'react-toastify'
 import useCaptcha from '@/hooks/useCaptcha'
 import useInputChangeHandler from '@/hooks/useInputChangeHandler'
 import useUser from '@/hooks/useUser'
@@ -39,7 +40,7 @@ export default function RegisterForm(props: RegisterFormProps) {
           },
         })
         await user.dispatch('fetch')
-        console.log(registerRes.message)
+        toast.success(registerRes.message)
         setLoading(false)
         props.closeModal()
       } catch {
@@ -48,13 +49,11 @@ export default function RegisterForm(props: RegisterFormProps) {
     }
   })
 
-  const handleInputChange = useInputChangeHandler(
-    new Map([
-      ['email', setEmail],
-      ['password', setPassword],
-      ['username', setUsername],
-    ])
-  )
+  const handleInputChange = useInputChangeHandler({
+    email: setEmail,
+    password: setPassword,
+    username: setUsername,
+  })
 
   const checkEmailValidity = (validity: ValidityState) => {
     if (validity.valueMissing) {

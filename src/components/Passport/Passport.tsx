@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { Button, Modal } from 'semantic-ui-react'
 import classes from './passport.module.css'
 import MyLink from '@/components/MyLink/MyLink'
@@ -16,18 +16,6 @@ export default function PassportModal() {
     link: '还没有账号？前往注册',
   })
 
-  const SignInOrRegister = useMemo(() => {
-    const closeModal = () => setModalOpen(false)
-    switch (formSwitch.key) {
-      case 'signin':
-        return <SignInForm closeModal={closeModal} />
-      case 'register':
-        return <RegisterForm closeModal={closeModal} />
-      default:
-        return <SignInForm closeModal={closeModal} />
-    }
-  }, [formSwitch.key])
-
   const handleFormSwitch = () => {
     if (formSwitch.key === 'signin') {
       setFormSwitch({
@@ -44,17 +32,27 @@ export default function PassportModal() {
     }
   }
 
+  const closeModal = () => {
+    setModalOpen(false)
+  }
+
   return (
     <Modal
       trigger={<Button color="teal">登录</Button>}
       open={modalOpen}
       onOpen={() => setModalOpen(true)}
-      onClose={() => setModalOpen(false)}
+      onClose={closeModal}
       dimmer={<Modal.Dimmer className={classes['dimmer-override']} />}
       style={{ width: 400, height: 550 }}
     >
-      <Modal.Header className={classes['modal-header']} content={formSwitch.header} />
-      <Modal.Content content={SignInOrRegister} />
+      <Modal.Header className={classes['modal-header']}>{formSwitch.header}</Modal.Header>
+      <Modal.Content>
+        {formSwitch.key === 'register' ? (
+          <RegisterForm closeModal={closeModal} />
+        ) : (
+          <SignInForm closeModal={closeModal} />
+        )}
+      </Modal.Content>
       <Modal.Description className={classes['modal-description']}>
         <MyLink style={{ fontSize: 'large' }} onClick={handleFormSwitch}>
           {formSwitch.link}

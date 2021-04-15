@@ -1,29 +1,14 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react'
+import React, { createContext, useState, useEffect } from 'react'
 import service from '@/utils/services'
-import type { User } from '@/typings'
-
-async function fetchUser() {
-  try {
-    const user = await service.get<User>('/user/auth', { doNothing: true })
-    return user
-  } catch {
-    return null
-  }
-}
-
-interface UserContextType {
-  value: User | null
-  dispatch: (action: 'fetch' | 'reset') => Promise<void>
-}
+import type { User, UserContextType } from '@/typings'
 
 export const UserContext = createContext<UserContextType>({
   value: null,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   dispatch: async () => {},
 })
 
 interface UserContextWrapperProps {
-  children?: React.ReactNode
+  children: React.ReactNode
 }
 
 /**
@@ -31,21 +16,33 @@ interface UserContextWrapperProps {
  */
 export default function UserContextWrapper(props: UserContextWrapperProps) {
   const [user, setUser] = useState<User | null>(null)
-  const dispatch = useCallback<UserContextType['dispatch']>(async (action) => {
+
+  const dispatch: UserContextType['dispatch'] = async (action) => {
     switch (action) {
-      case 'fetch':
-        setUser(await fetchUser())
+      case 'fetch': {
+        try {
+          const user = await service.get<User>('/user/auth', { doNothing: true })
+          setUser(user)
+        } catch {}
         break
-      case 'reset':
-        setUser(null)
+      }
+      case 'reset': {
+        try {
+          await service.get('/logout')
+        } finally {
+          setUser(null)
+        }
         break
+      }
       default:
-        throw new Error('type invalid')
+        if (import.meta.env.DEV) {
+          throw new Error('type invalid')
+        }
     }
-  }, [])
+  }
 
   useEffect(() => {
-    fetchUser().then((user) => setUser(user))
+    dispatch('fetch')
   }, [])
 
   return (
