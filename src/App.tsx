@@ -1,5 +1,7 @@
 import React, { Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css'
 import NavBar from '@/components/NavBar/NavBar'
 import UserContextWrapper from '@/components/UserContextWrapper/UserContextWrapper'
 
@@ -24,6 +26,17 @@ export default function App() {
         </UserContextWrapper>
       </Router>
       <footer>footer</footer>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   )
 }
