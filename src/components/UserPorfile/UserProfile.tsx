@@ -16,7 +16,7 @@ export default function UserProfile(props: UserPorfileProps) {
   const items = [
     {
       name: 'user',
-      text: '个人中心',
+      text: '我的主页',
       clickHandler: () => {
         /** todo */
       },

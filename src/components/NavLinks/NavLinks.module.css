@@ -30,6 +30,12 @@
   color: pink;
 }
 
+.nav-link-manager-active,
+.nav-link-manager:hover {
+  background-color: rgba(100, 149, 237, 0.2);
+  color: cornflowerblue;
+}
+
 .iconfont {
   font-size: 1.5rem;
   margin-right: 5px;
@@ -45,4 +51,8 @@
 
 .icon-comments {
   color: pink;
+}
+
+.icon-manager {
+  color: cornflowerblue;
 }

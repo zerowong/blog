@@ -9,6 +9,6 @@ export interface User {
 }
 
 export interface UserContextType {
-  value: User | null
-  dispatch: (action: 'fetch' | 'reset') => Promise<void>
+  readonly value: User | null
+  readonly dispatch: (action: 'fetch' | 'reset') => Promise<void>
 }

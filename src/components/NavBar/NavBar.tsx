@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import classes from './NavBar.module.css'
 import NavLinks from '@/components/NavLinks/NavLinks'
 import PassportModal from '@/components/Passport/Passport'
@@ -17,10 +18,10 @@ export default function NavBar() {
         ApassEr
       </a>
       <NavLinks />
-      <div className={user.value ? undefined : 'hidden'}>
+      <div className={classNames({ hidden: !user.value })}>
         <UserProfile user={user} />
       </div>
-      <div className={user.value ? 'hidden' : undefined}>
+      <div className={classNames({ hidden: user.value })}>
         <PassportModal />
       </div>
     </nav>

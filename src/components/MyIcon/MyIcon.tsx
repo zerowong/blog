@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 
 interface MyIconProps {
   name: string
@@ -12,7 +13,7 @@ interface MyIconProps {
  */
 export default function MyIcon(props: MyIconProps) {
   return (
-    <svg className={`iconfont ${props.iconfontClassName ?? ''}`} aria-hidden>
+    <svg className={classNames('iconfont', props.iconfontClassName)} aria-hidden>
       <use xlinkHref={`#icon-${props.name}`} style={props.style} className={props.className}></use>
     </svg>
   )
