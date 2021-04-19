@@ -8,6 +8,7 @@ import UserContextWrapper from '@/components/UserContextWrapper/UserContextWrapp
 const Home = lazy(() => import('@/pages/Home/Home'))
 const Articles = lazy(() => import('@/pages/Articles/Articles'))
 const Comments = lazy(() => import('@/pages/Comments/Comments'))
+const Manager = lazy(() => import('@/pages/Manager/Manager'))
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
               <Route exact path="/" component={Home} />
               <Route path="/articles" component={Articles} />
               <Route path="/comments" component={Comments} />
+              <Route path="/manager" component={Manager} />
               <Redirect to="/" />
             </Switch>
           </Suspense>
