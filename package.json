@@ -1,5 +1,5 @@
 {
-  "name": "apasser-blog-react",
+  "name": "apasser-blog",
   "version": "1.0.0",
   "description": "ApassEr's Blog",
   "private": true,
@@ -8,10 +8,10 @@
     "email": "wongzero@foxmail.com"
   },
   "license": "MIT",
-  "bugs": "https://github.com/zerowong/blog-react/issues",
+  "bugs": "https://github.com/zerowong/blog/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zerowong/blog-react.git"
+    "url": "https://github.com/zerowong/blog.git"
   },
   "scripts": {
     "dev": "vite",
@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "classnames": "^2.3.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-router-dom": "^5.2.0",
