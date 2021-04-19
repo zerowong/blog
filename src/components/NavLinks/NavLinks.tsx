@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import MyIcon from '@/components/MyIcon/MyIcon'
 import useUser from '@/hooks/useUser'
 import classes from './NavLinks.module.css'
+
+interface LocationState {
+  name: string
+}
 
 /**
  * 顶部导航栏路由表
@@ -16,7 +20,6 @@ export default function NavLinks() {
   const [routeMap, setRouteMap] = useState(initRouteMap.current)
 
   const user = useUser()
-
   useEffect(() => {
     if (user.value?.role === 'admin') {
       setRouteMap([...initRouteMap.current, { to: '/manager', name: '后台', key: 'manager' }])
@@ -25,12 +28,17 @@ export default function NavLinks() {
     }
   }, [user])
 
+  const location = useLocation<LocationState>()
+  useEffect(() => {
+    document.title = `${location.state.name} - ApassEr`
+  })
+
   return (
     <div className={classes['nav-links']}>
       {routeMap.map((route) => (
         <NavLink
           exact
-          to={route.to}
+          to={{ pathname: route.to, state: { name: route.name } }}
           key={route.to}
           className={`${classes['nav-link']} ${classes[`nav-link-${route.key}`]}`}
           activeClassName={classes[`nav-link-${route.key}-active`]}
