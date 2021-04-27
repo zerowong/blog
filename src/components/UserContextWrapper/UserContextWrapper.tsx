@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react'
-import service from '@/utils/services'
+import request from '@/utils/request'
 import type { User, UserContextType } from '@/typings'
 
 export const UserContext = createContext<UserContextType>({
@@ -20,24 +20,22 @@ export default function UserContextWrapper(props: UserContextWrapperProps) {
   const dispatch: UserContextType['dispatch'] = async (action) => {
     switch (action) {
       case 'fetch': {
-        try {
-          const user = await service.get<User>('/user/auth', { doNothing: true })
-          setUser(user)
-        } catch {}
+        const user = await request
+          .get('/user/auth', { noCommonErrorHanlde: true })
+          .catch(() => null)
+        setUser(user)
         break
       }
       case 'reset': {
-        try {
-          await service.get('/logout')
-        } finally {
-          setUser(null)
-        }
+        await request.get('/logout', { noCommonErrorHanlde: true }).catch(() => {})
+        setUser(null)
         break
       }
-      default:
+      default: {
         if (import.meta.env.DEV) {
           throw new Error('type invalid')
         }
+      }
     }
   }
 

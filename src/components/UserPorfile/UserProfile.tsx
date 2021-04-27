@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Popup, Menu } from 'semantic-ui-react'
-import classes from './UserProfile.module.css'
+import c from './UserProfile.module.css'
 import type { UserContextType } from '@/typings'
 import MyIcon from '@/components/MyIcon/MyIcon'
 
@@ -11,7 +11,7 @@ interface UserPorfileProps {
 export default function UserProfile(props: UserPorfileProps) {
   const { value: user, dispatch } = props.user
 
-  const [avatarClassNames, setAvatarClassNames] = useState(classes['avatar'])
+  const [avatarClassNames, setAvatarClassNames] = useState(c['avatar'])
 
   const items = [
     {
@@ -25,11 +25,11 @@ export default function UserProfile(props: UserPorfileProps) {
   ]
 
   const handleOpen = () => {
-    setAvatarClassNames(`${classes['avatar']} ${classes['avatar-active']}`)
+    setAvatarClassNames(`${c['avatar']} ${c['avatar-active']}`)
   }
 
   const handleClose = () => {
-    setAvatarClassNames(classes['avatar'])
+    setAvatarClassNames(c['avatar'])
   }
 
   return (
@@ -46,22 +46,18 @@ export default function UserProfile(props: UserPorfileProps) {
       offset={[0, -40]}
       onOpen={handleOpen}
       onClose={handleClose}
-      className={classes['popup-modal-override']}
+      className={c['popup-modal-override']}
     >
       <>
-        <img
-          src={user?.avatar}
-          alt={`${user?.name}'s avatar`}
-          className={classes['popup-avatar']}
-        />
-        <div className={classes['content']}>
-          <h2 className={classes['popup-name']}>{user?.name}</h2>
+        <img src={user?.avatar} alt={`${user?.name}'s avatar`} className={c['popup-avatar']} />
+        <div className={c['content']}>
+          <h2 className={c['popup-name']}>{user?.name}</h2>
           <Menu vertical secondary fluid compact>
             {items.map((item) => (
               <Menu.Item key={item.name} name={item.name} onClick={item.clickHandler}>
-                <span className={classes['menu-item']}>
+                <span className={c['menu-item']}>
                   <MyIcon name={item.name} />
-                  <span className={classes['menu-item-text']}>{item.text}</span>
+                  <span className={c['menu-item-text']}>{item.text}</span>
                 </span>
               </Menu.Item>
             ))}

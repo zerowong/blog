@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import MyIcon from '@/components/MyIcon/MyIcon'
 import useUser from '@/hooks/useUser'
-import classes from './NavLinks.module.css'
+import c from './NavLinks.module.css'
 
 interface LocationState {
   name: string
@@ -28,25 +28,28 @@ export default function NavLinks() {
     }
   }, [user])
 
-  const location = useLocation<LocationState>()
+  // 首次渲染时无state属性
+  const location = useLocation<LocationState | undefined>()
   useEffect(() => {
-    document.title = `${location.state.name} - ApassEr`
+    if (location.state) {
+      document.title = `${location.state.name} - ApassEr`
+    }
   })
 
   return (
-    <div className={classes['nav-links']}>
+    <div className={c['nav-links']}>
       {routeMap.map((route) => (
         <NavLink
           exact
           to={{ pathname: route.to, state: { name: route.name } }}
           key={route.to}
-          className={`${classes['nav-link']} ${classes[`nav-link-${route.key}`]}`}
-          activeClassName={classes[`nav-link-${route.key}-active`]}
+          className={`${c['nav-link']} ${c[`nav-link-${route.key}`]}`}
+          activeClassName={c[`nav-link-${route.key}-active`]}
         >
           <MyIcon
             name={route.key}
-            iconfontClassName={classes['iconfont']}
-            className={classes[`icon-${route.key}`]}
+            iconfontClassName={c['iconfont']}
+            className={c[`icon-${route.key}`]}
           />
           {route.name}
         </NavLink>

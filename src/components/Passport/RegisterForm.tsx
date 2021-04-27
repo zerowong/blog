@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import useCaptcha from '@/hooks/useCaptcha'
 import useInputChangeHandler from '@/hooks/useInputChangeHandler'
 import useUser from '@/hooks/useUser'
-import service from '@/utils/services'
+import request from '@/utils/request'
 
 interface RegisterFormProps {
   closeModal: () => void
@@ -30,7 +30,7 @@ export default function RegisterForm(props: RegisterFormProps) {
     if (res.ret === 0) {
       setLoading(true)
       try {
-        const registerRes = await service.post<{ message: string }>('/register', {
+        const registerRes = await request.post('/register', {
           Ticket: res.ticket,
           Randstr: res.randstr,
           register: {
