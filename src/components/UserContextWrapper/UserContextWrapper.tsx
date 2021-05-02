@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react'
-import request from '@/utils/request'
-import type { User, UserContextType } from '@/typings'
+import request from 'src/utils/request'
+import type { User, UserContextType } from 'src/typings'
 
 export const UserContext = createContext<UserContextType>({
   value: null,
@@ -27,7 +27,7 @@ export default function UserContextWrapper(props: UserContextWrapperProps) {
         break
       }
       case 'reset': {
-        await request.get('/logout', { noCommonErrorHanlde: true }).catch(() => {})
+        await request.get('/user/logout', { noCommonErrorHanlde: true }).catch(() => {})
         setUser(null)
         break
       }

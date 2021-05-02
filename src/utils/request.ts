@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { toast } from 'react-toastify'
-import type { ApiResponse, RequestRUL } from '@/typings/request'
+import type { ApiResponse, RequestRUL } from 'src/typings/request'
 
 interface MyRequestConfig {
   baseURL: string

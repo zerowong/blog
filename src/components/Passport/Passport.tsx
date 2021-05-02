@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Modal } from 'semantic-ui-react'
 import c from './passport.module.css'
-import MyLink from '@/components/MyLink/MyLink'
+import MyLink from 'src/components/MyLink/MyLink'
 import SignInForm from './SignInForm'
 import RegisterForm from './RegisterForm'
 

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Form, Button } from 'semantic-ui-react'
 import { toast } from 'react-toastify'
-import useCaptcha from '@/hooks/useCaptcha'
-import useInputChangeHandler from '@/hooks/useInputChangeHandler'
-import useUser from '@/hooks/useUser'
-import request from '@/utils/request'
+import useCaptcha from 'src/hooks/useCaptcha'
+import useInputChangeHandler from 'src/hooks/useInputChangeHandler'
+import useUser from 'src/hooks/useUser'
+import request from 'src/utils/request'
 
 interface RegisterFormProps {
   closeModal: () => void
@@ -30,14 +30,12 @@ export default function RegisterForm(props: RegisterFormProps) {
     if (res.ret === 0) {
       setLoading(true)
       try {
-        const registerRes = await request.post('/register', {
+        const registerRes = await request.post('/user/register', {
           Ticket: res.ticket,
           Randstr: res.randstr,
-          register: {
-            mail: email,
-            pass: password,
-            name: username,
-          },
+          mail: email,
+          pass: password,
+          name: username,
         })
         await user.dispatch('fetch')
         toast.success(registerRes.message)

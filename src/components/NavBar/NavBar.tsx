@@ -1,10 +1,10 @@
 import React from 'react'
 import classNames from 'classnames'
 import c from './NavBar.module.css'
-import NavLinks from '@/components/NavLinks/NavLinks'
-import PassportModal from '@/components/Passport/Passport'
-import UserProfile from '@/components/UserPorfile/UserProfile'
-import useUser from '@/hooks/useUser'
+import NavLinks from 'src/components/NavLinks/NavLinks'
+import PassportModal from 'src/components/Passport/Passport'
+import UserProfile from 'src/components/UserPorfile/UserProfile'
+import useUser from 'src/hooks/useUser'
 
 /**
  * 顶部导航栏

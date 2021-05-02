@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Form, Button } from 'semantic-ui-react'
 import { toast } from 'react-toastify'
-import useCaptcha from '@/hooks/useCaptcha'
-import useInputChangeHandler from '@/hooks/useInputChangeHandler'
-import useUser from '@/hooks/useUser'
-import request from '@/utils/request'
+import useCaptcha from 'src/hooks/useCaptcha'
+import useInputChangeHandler from 'src/hooks/useInputChangeHandler'
+import useUser from 'src/hooks/useUser'
+import request from 'src/utils/request'
 
 interface SignInFormProps {
   closeModal: () => void
@@ -24,7 +24,9 @@ export default function SignInForm(props: SignInFormProps) {
     if (res.ret === 0) {
       setLoading(true)
       try {
-        const signInRes = await request.post('/login', {
+        const signInRes = await request.post('/user/login', {
+          Ticket: res.ticket,
+          Randstr: res.randstr,
           mail: email,
           pass: password,
         })

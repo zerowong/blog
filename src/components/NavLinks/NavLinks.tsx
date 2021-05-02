@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import MyIcon from '@/components/MyIcon/MyIcon'
-import useUser from '@/hooks/useUser'
+import MyIcon from 'src/components/MyIcon/MyIcon'
+import useUser from 'src/hooks/useUser'
 import c from './NavLinks.module.css'
 
 interface LocationState {

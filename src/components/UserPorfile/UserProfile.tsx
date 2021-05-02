@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Popup, Menu } from 'semantic-ui-react'
 import c from './UserProfile.module.css'
-import type { UserContextType } from '@/typings'
-import MyIcon from '@/components/MyIcon/MyIcon'
+import type { UserContextType } from 'src/typings'
+import MyIcon from 'src/components/MyIcon/MyIcon'
 
 interface UserPorfileProps {
   user: UserContextType
