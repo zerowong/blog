@@ -7,3 +7,4 @@ dist-ssr
 
 # the project
 /.vscode
+/*.log

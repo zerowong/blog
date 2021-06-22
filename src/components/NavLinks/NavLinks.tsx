@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import MyIcon from 'src/components/MyIcon/MyIcon'
 import useUser from 'src/hooks/useUser'
-import c from './NavLinks.module.css'
+import classes from './NavLinks.module.css'
 
 interface LocationState {
   name: string
@@ -37,19 +37,18 @@ export default function NavLinks() {
   })
 
   return (
-    <div className={c['nav-links']}>
+    <div className={classes['nav-links']}>
       {routeMap.map((route) => (
         <NavLink
           exact
           to={{ pathname: route.to, state: { name: route.name } }}
           key={route.to}
-          className={`${c['nav-link']} ${c[`nav-link-${route.key}`]}`}
-          activeClassName={c[`nav-link-${route.key}-active`]}
+          className={`${classes['nav-link']} ${classes[`nav-link-${route.key}`]}`}
+          activeClassName={classes[`nav-link-${route.key}-active`]}
         >
           <MyIcon
             name={route.key}
-            iconfontClassName={c['iconfont']}
-            className={c[`icon-${route.key}`]}
+            className={`${classes['iconfont']} ${classes[`icon-${route.key}`]}`}
           />
           {route.name}
         </NavLink>

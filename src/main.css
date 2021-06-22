@@ -1,9 +1,15 @@
 :root {
-  --footer-height: 60px;
+  --header-height: 60px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei,
+    Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif;
 }
 
 #app {
   height: 100vh;
+  background-color: rgb(246, 246, 246);
 }
 
 .iconfont {
@@ -14,8 +20,27 @@
   overflow: hidden;
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+  transform-origin: center center;
+}
+
 .hidden {
   display: none;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.dimmer {
+  background-color: rgba(0, 0, 0, 0.2) !important;
 }
 
 /* Underline From Center */

@@ -21,13 +21,13 @@ export default function UserContextWrapper(props: UserContextWrapperProps) {
     switch (action) {
       case 'fetch': {
         const user = await request
-          .get('/user/auth', { noCommonErrorHanlde: true })
+          .get('/user/auth', { noCommonErrorHandle: true })
           .catch(() => null)
         setUser(user)
         break
       }
       case 'reset': {
-        await request.get('/user/logout', { noCommonErrorHanlde: true }).catch(() => {})
+        await request.get('/user/logout', { noCommonErrorHandle: true }).catch(() => {})
         setUser(null)
         break
       }

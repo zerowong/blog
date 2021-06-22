@@ -1,14 +1,27 @@
-import type { User } from './index'
+import type { User, Article, TempCredential } from './index'
 
 interface CommonResponse {
   message: string
 }
 
-export interface ApiResponse {
+export interface ApiResponseOfGet {
   '/user/auth': User
   '/user/logout': void
-  '/user/login': CommonResponse
-  '/user/register': CommonResponse
+  '/articles': Article[]
+  '/article': Article
+  '/sts': TempCredential
 }
 
-export type RequestRUL = keyof ApiResponse
+export interface ApiResponseOfPost {
+  '/user/login': CommonResponse
+  '/user/register': CommonResponse
+  '/article': CommonResponse
+}
+
+export interface ApiResponseOfPatch {
+  '/article': CommonResponse
+}
+
+export interface ApiResponseOfDelete {
+  '/article': CommonResponse
+}

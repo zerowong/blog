@@ -5,6 +5,7 @@ export default defineConfig({
   plugins: [reactRefresh()],
   server: {
     port: 8082,
+    https: true,
   },
   css: {
     modules: {
@@ -13,7 +14,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      src: './src',
+      src: '/src',
     },
   },
 })

@@ -1,0 +1,16 @@
+.modal-text {
+  text-align: center;
+}
+
+.modal-close-icon {
+  font-size: 30px;
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  cursor: pointer;
+  color: gray;
+}
+
+.modal-close-icon:hover {
+  color: red;
+}

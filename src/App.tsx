@@ -27,7 +27,6 @@ export default function App() {
           </Suspense>
         </UserContextWrapper>
       </Router>
-      <footer>footer</footer>
       <ToastContainer
         position="bottom-right"
         autoClose={2000}

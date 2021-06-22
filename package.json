@@ -1,6 +1,6 @@
 {
   "name": "apasser-blog",
-  "version": "1.0.0",
+  "version": "2.0.1",
   "description": "ApassEr's Blog",
   "private": true,
   "author": {
@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "classnames": "^2.3.1",
+    "cos-js-sdk-v5": "^1.2.14",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-router-dom": "^5.2.0",

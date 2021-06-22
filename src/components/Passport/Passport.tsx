@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Modal } from 'semantic-ui-react'
-import c from './passport.module.css'
+import classes from './passport.module.css'
 import MyLink from 'src/components/MyLink/MyLink'
 import SignInForm from './SignInForm'
 import RegisterForm from './RegisterForm'
@@ -42,10 +42,10 @@ export default function PassportModal() {
       open={modalOpen}
       onOpen={() => setModalOpen(true)}
       onClose={closeModal}
-      dimmer={<Modal.Dimmer className={c['dimmer-override']} />}
+      dimmer={<Modal.Dimmer className="dimmer" />}
       style={{ width: 400, height: 550 }}
     >
-      <Modal.Header className={c['modal-header']}>{formSwitch.header}</Modal.Header>
+      <Modal.Header className={classes['modal-header']}>{formSwitch.header}</Modal.Header>
       <Modal.Content>
         {formSwitch.key === 'register' ? (
           <RegisterForm closeModal={closeModal} />
@@ -53,7 +53,7 @@ export default function PassportModal() {
           <SignInForm closeModal={closeModal} />
         )}
       </Modal.Content>
-      <Modal.Description className={c['modal-description']}>
+      <Modal.Description className={classes['modal-description']}>
         <MyLink style={{ fontSize: 'large' }} onClick={handleFormSwitch}>
           {formSwitch.link}
         </MyLink>

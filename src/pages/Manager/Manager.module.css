@@ -1,0 +1,28 @@
+.main {
+  height: calc(100% - var(--header-height));
+  width: 60%;
+  margin: 0 auto;
+  padding: 10px 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 10px;
+}
+
+.menu {
+  margin-bottom: unset !important;
+}
+
+.article-manager-header {
+  height: 50px;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 20px;
+  column-gap: 20px;
+}
+
+.article-manager-body {
+  padding: 20px;
+  overflow: auto;
+}

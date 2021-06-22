@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import c from './NavBar.module.css'
+import classes from './NavBar.module.css'
 import NavLinks from 'src/components/NavLinks/NavLinks'
 import PassportModal from 'src/components/Passport/Passport'
 import UserProfile from 'src/components/UserPorfile/UserProfile'
@@ -13,8 +13,8 @@ export default function NavBar() {
   const user = useUser()
 
   return (
-    <nav className={c['nav-bar']}>
-      <a className={c['brand']} href="/">
+    <nav className={classes['nav-bar']}>
+      <a className={classes['brand']} href="/">
         ApassEr
       </a>
       <NavLinks />

@@ -1,9 +1,10 @@
 .nav-bar {
-  height: 60px;
+  height: var(--header-height);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-bottom: 3px solid whitesmoke;
+  background-color: white;
+  box-shadow: 0 1px 5px 0px rgb(18 18 18 / 10%);
 }
 
 .brand {
