@@ -8,3 +8,13 @@ dist-ssr
 # the project
 /.vscode
 /*.log
+
+# yarn berry
+.yarn/*
+# !.yarn/cache
+# !.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+# !.yarn/versions
+/.pnp.js
