@@ -1,10 +1,7 @@
 import React from 'react'
+import type { PropsWithChildren } from 'react'
 import classes from './Card.module.css'
 
-interface CardProps {
-  children?: React.ReactNode
-}
-
-export default function Card(props: CardProps) {
+export default function Card(props: PropsWithChildren<unknown>) {
   return <div className={classes['card']}>{props.children}</div>
 }

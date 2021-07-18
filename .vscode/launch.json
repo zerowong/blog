@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "local",
+      "request": "launch",
+      "type": "pwa-chrome",
+      "url": "http://localhost:8082",
+      "webRoot": "${workspaceFolder}"
+    }
+  ]
+}

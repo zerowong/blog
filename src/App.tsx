@@ -2,8 +2,8 @@ import React, { Suspense, lazy } from 'react'
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
-import NavBar from 'src/components/NavBar/NavBar'
-import UserContextWrapper from 'src/components/UserContextWrapper/UserContextWrapper'
+import NavBar from 'src/views/NavBar/NavBar'
+import UserContext from 'src/context/UserContext/UserContext'
 
 const Home = lazy(() => import('src/pages/Home/Home'))
 const Articles = lazy(() => import('src/pages/Articles/Articles'))
@@ -14,7 +14,7 @@ export default function App() {
   return (
     <>
       <Router>
-        <UserContextWrapper>
+        <UserContext>
           <NavBar />
           <Suspense fallback={null}>
             <Switch>
@@ -25,7 +25,7 @@ export default function App() {
               <Redirect to="/" />
             </Switch>
           </Suspense>
-        </UserContextWrapper>
+        </UserContext>
       </Router>
       <ToastContainer
         position="bottom-right"

@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { UserContext } from 'src/components/UserContextWrapper/UserContextWrapper'
+import { UserContext } from 'src/context/UserContext/UserContext'
 
 /**
  * 用户钩子

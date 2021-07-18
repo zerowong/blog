@@ -3,7 +3,7 @@ import { Modal } from 'semantic-ui-react'
 import type { ModalProps, ModalHeaderProps } from 'semantic-ui-react'
 import MyIcon from 'src/components/MyIcon/MyIcon'
 import classes from './MyModal.module.css'
-
+// TODO: 支持ESC键关闭
 export default function MyModal(props: ModalProps) {
   return (
     <Modal dimmer={<Modal.Dimmer className="dimmer" />} closeOnDimmerClick={false} {...props} />

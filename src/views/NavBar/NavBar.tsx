@@ -1,9 +1,8 @@
 import React from 'react'
-import classNames from 'classnames'
 import classes from './NavBar.module.css'
-import NavLinks from 'src/components/NavLinks/NavLinks'
-import PassportModal from 'src/components/Passport/Passport'
-import UserProfile from 'src/components/UserPorfile/UserProfile'
+import NavLinks from 'src/views/NavLinks/NavLinks'
+import PassportModal from 'src/views/Passport/Passport'
+import UserProfile from 'src/views/UserPorfile/UserProfile'
 import useUser from 'src/hooks/useUser'
 
 /**
@@ -12,16 +11,18 @@ import useUser from 'src/hooks/useUser'
 export default function NavBar() {
   const user = useUser()
 
+  const isLogin = user.value !== null
+
   return (
     <nav className={classes['nav-bar']}>
       <a className={classes['brand']} href="/">
         ApassEr
       </a>
       <NavLinks />
-      <div className={classNames({ hidden: !user.value })}>
+      <div hidden={!isLogin}>
         <UserProfile user={user} />
       </div>
-      <div className={classNames({ hidden: user.value })}>
+      <div hidden={isLogin}>
         <PassportModal />
       </div>
     </nav>

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import useCaptcha from 'src/hooks/useCaptcha'
 import useInputChangeHandler from 'src/hooks/useInputChangeHandler'
 import useUser from 'src/hooks/useUser'
-import request from 'src/utils/request'
+import Service from 'src/utils/services'
 
 interface SignInFormProps {
   closeModal: () => void
@@ -24,7 +24,7 @@ export default function SignInForm(props: SignInFormProps) {
     if (res.ret === 0) {
       setLoading(true)
       try {
-        const signInRes = await request.post('/user/login', {
+        const signInRes = await Service.userLogin({
           Ticket: res.ticket,
           Randstr: res.randstr,
           mail: email,

@@ -1,6 +1,6 @@
 import type { Article } from 'src/typings/index'
 
-interface ANode {
+export interface ANode {
   type: 'dir' | 'file'
   name: string
   children: ANode[]

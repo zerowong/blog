@@ -26,23 +26,6 @@ body {
   }
 }
 
-.spin {
-  animation: spin 1s linear infinite;
-  transform-origin: center center;
-}
-
-.hidden {
-  display: none;
-}
-
-.cursor-pointer {
-  cursor: pointer;
-}
-
-.dimmer {
-  background-color: rgba(0, 0, 0, 0.2) !important;
-}
-
 /* Underline From Center */
 .hvr-underline-from-center {
   display: inline-block;
@@ -77,4 +60,31 @@ body {
 .hvr-underline-from-center:active:before {
   left: 0;
   right: 0;
+}
+
+/* 原子类 */
+
+.spin {
+  animation: spin 1s linear infinite;
+  transform-origin: center center;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.dimmer {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.margin-right-20 {
+  margin-right: 20px;
+}
+
+.margin-right-10 {
+  margin-right: 10px;
+}
+
+.fontsize-large {
+  font-size: large;
 }

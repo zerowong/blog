@@ -1,33 +1,28 @@
 import React, { createContext, useState, useEffect } from 'react'
-import request from 'src/utils/request'
-import type { User, UserContextType } from 'src/typings'
+import type { PropsWithChildren } from 'react'
+import Service from 'src/utils/services'
+import type { UserContextType } from 'src/typings'
 
 export const UserContext = createContext<UserContextType>({
   value: null,
   dispatch: async () => {},
 })
 
-interface UserContextWrapperProps {
-  children: React.ReactNode
-}
-
 /**
  * 用户上下文组件
  */
-export default function UserContextWrapper(props: UserContextWrapperProps) {
-  const [user, setUser] = useState<User | null>(null)
+export default function UserContextProvider(props: PropsWithChildren<unknown>) {
+  const [user, setUser] = useState<UserContextType['value']>(null)
 
   const dispatch: UserContextType['dispatch'] = async (action) => {
     switch (action) {
       case 'fetch': {
-        const user = await request
-          .get('/user/auth', { noCommonErrorHandle: true })
-          .catch(() => null)
+        const user = await Service.userAuth().catch(() => null)
         setUser(user)
         break
       }
       case 'reset': {
-        await request.get('/user/logout', { noCommonErrorHandle: true }).catch(() => {})
+        await Service.userLogout().catch(() => {})
         setUser(null)
         break
       }

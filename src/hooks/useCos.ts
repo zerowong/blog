@@ -1,10 +1,10 @@
 import COS from 'cos-js-sdk-v5'
-import request from 'src/utils/request'
+import Service from 'src/utils/services'
 
 export default function useCos() {
   const cos = new COS({
     getAuthorization(options, callback) {
-      request.get('/sts').then(
+      Service.getSTS().then(
         (tempCred) => {
           callback({
             TmpSecretId: tempCred.credentials.tmpSecretId,

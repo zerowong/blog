@@ -6,7 +6,6 @@ dist-ssr
 *.local
 
 # the project
-/.vscode
 /*.log
 
 # yarn berry

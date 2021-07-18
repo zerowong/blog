@@ -3,13 +3,14 @@ import { Menu, Button, Form, List, Popup } from 'semantic-ui-react'
 import type { MenuProps, FormProps } from 'semantic-ui-react'
 import { toast } from 'react-toastify'
 import classes from './Manager.module.css'
-import request from 'src/utils/request'
+import Service from 'src/utils/services'
 import type { Article } from 'src/typings'
 import Card from 'src/components/Card/Card'
 import Refresh from 'src/components/Refresh/Refresh'
 import Modal from 'src/components/MyModal/MyModal'
 import MyIcon from 'src/components/MyIcon/MyIcon'
 import buildTree from 'src/utils/build-tree'
+import type { ANode } from 'src/utils/build-tree'
 import { removeExt } from 'src/utils'
 import useCos from 'src/hooks/useCos'
 
@@ -70,7 +71,7 @@ function ArticleManager() {
   const cos = useCos()
 
   const fetchArticles = async () => {
-    const data = await request.get('/articles').catch(() => [])
+    const data = await Service.getAllArticles().catch(() => [])
     setArticles(data)
   }
 
@@ -81,27 +82,28 @@ function ArticleManager() {
   const handleAddArticleSubmit: FormProps['onSubmit'] = async (event) => {
     const formData = new FormData(event.currentTarget)
     const data: Record<string, string> = {}
-    for (const [key, val] of formData) {
-      if (val instanceof File) {
-        if (/^image\//.test(val.type)) {
-          const path = `article-cover/${val.name}`
-          const result = await cos.putObject(path, val).catch(() => {
+    for (const [key, value] of formData) {
+      if (value instanceof File) {
+        if (/^image\//.test(value.type)) {
+          const path = `article-cover/${value.name}`
+          const result = await cos.putObject(path, value).catch(() => {
             toast.error('上传失败')
           })
           if (result && result.statusCode === 200) {
             data[key] = `cdn.apasser.xyz/${path}`
           }
         } else {
-          data.title = removeExt(val.name)
-          data.date = new Date(val.lastModified).toISOString()
-          const content = await val.text()
+          data.title = removeExt(value.name)
+          data.date = new Date(value.lastModified).toISOString()
+          const content = await value.text()
           data[key] = content
         }
       } else {
-        data[key] = val
+        data[key] = value
       }
     }
-    const response = await request.post('/article', data).catch(() => {})
+    // @ts-ignore
+    const response = await Service.addArticle(data).catch(() => {})
     if (response) {
       toast.success(response.message)
       setModalOpen(false)
@@ -109,8 +111,11 @@ function ArticleManager() {
     }
   }
 
-  const handleArticleDelete = async (id: string) => {
-    const response = await request.delete('/article', { id }).catch(() => {
+  const handleArticleDelete = async (id?: string) => {
+    if (!id) {
+      return
+    }
+    const response = await Service.deleteArticleById({ _id: id }).catch(() => {
       toast.error('删除失败')
     })
     if (response) {
@@ -122,26 +127,27 @@ function ArticleManager() {
   const handleArticleModifySubmit: FormProps['onSubmit'] = async (event) => {
     const formData = new FormData(event.currentTarget)
     const data: Record<string, string> = {}
-    for (const [key, val] of formData) {
-      if (val instanceof File) {
-        if (/^image\//.test(val.type)) {
-          const path = `article-cover/${val.name}`
-          const result = await cos.putObject(path, val).catch(() => {
+    for (const [key, value] of formData) {
+      if (value instanceof File) {
+        if (/^image\//.test(value.type)) {
+          const path = `article-cover/${value.name}`
+          const result = await cos.putObject(path, value).catch(() => {
             toast.error('上传失败')
           })
           if (result && result.statusCode === 200) {
             data[key] = `cdn.apasser.xyz/${path}`
           }
         } else {
-          const content = await val.text()
+          const content = await value.text()
           data[key] = content
+          data.date = new Date(value.lastModified).toISOString()
         }
       } else {
-        data[key] = val
+        data[key] = value
       }
     }
-    data.id = selectArticleId
-    const response = await request.patch('/article', data).catch(() => {})
+    // @ts-ignore
+    const response = await Service.modifyArticleById({ _id: selectArticleId }, data).catch(() => {})
     if (response) {
       toast.success(response.message)
       setModifyModalOpen(false)
@@ -149,39 +155,38 @@ function ArticleManager() {
     }
   }
 
-  const renderAricleTree = (articles: Article[]) => {
-    const tree = buildTree(articles)
-    const renderNode = (node: typeof tree) => {
-      if (node.type === 'dir' && node.children.length > 0) {
-        return (
-          <List.Item key={node.name}>
-            <List.Icon name="folder" color="teal" />
-            <List.Content>
-              <List.Header>{node.name}</List.Header>
-              <List.List>{node.children.map((child) => renderNode(child))}</List.List>
-            </List.Content>
-          </List.Item>
-        )
-      }
+  const renderNode = (node: ANode) => {
+    if (node.type === 'dir' && node.children.length > 0) {
       return (
         <List.Item key={node.name}>
-          <List.Icon name="file text" color="blue" />
+          <List.Icon name="folder" color="teal" />
           <List.Content>
-            <List.Header>{node.name}</List.Header>
-            <List.Description>
+            <List.Header className="fontsize-large">{node.name}</List.Header>
+            <List.List>{node.children.map((child) => renderNode(child))}</List.List>
+          </List.Content>
+        </List.Item>
+      )
+    }
+    return (
+      <List.Item key={node.name}>
+        <List.Icon name="file text" color="blue" />
+        <List.Content>
+          <List.Header>
+            <span className="margin-right-20 fontsize-large">{node.name}</span>
+            <span>
               <MyIcon
                 name="modify"
-                className="cursor-pointer"
+                className="cursor-pointer fontsize-large margin-right-10"
                 onClick={() => {
                   setModifyModalOpen(true)
-                  setSelectArticleId(node.id as string)
+                  if (node.id) {
+                    setSelectArticleId(node.id)
+                  }
                 }}
               />
               <Popup
                 basic
-                trigger={
-                  <MyIcon name="delete" style={{ marginLeft: 5 }} className="cursor-pointer" />
-                }
+                trigger={<MyIcon name="delete" className="cursor-pointer fontsize-large" />}
                 on="click"
                 eventsEnabled={false}
                 hideOnScroll
@@ -191,19 +196,19 @@ function ArticleManager() {
                 <Button size="mini" color="red" onClick={() => document.body.click()}>
                   取消
                 </Button>
-                <Button
-                  size="mini"
-                  color="teal"
-                  onClick={() => handleArticleDelete(node.id as string)}
-                >
+                <Button size="mini" color="teal" onClick={() => handleArticleDelete(node.id)}>
                   确定
                 </Button>
               </Popup>
-            </List.Description>
-          </List.Content>
-        </List.Item>
-      )
-    }
+            </span>
+          </List.Header>
+        </List.Content>
+      </List.Item>
+    )
+  }
+
+  const renderAricleTree = (articles: Article[]) => {
+    const tree = buildTree(articles)
     return <List>{tree.children.map((node) => renderNode(node))}</List>
   }
 
