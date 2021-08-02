@@ -2,16 +2,24 @@ import React, { useState } from 'react'
 import { Popup, Menu } from 'semantic-ui-react'
 import classes from './UserProfile.module.css'
 import type { UserContextType } from 'src/typings'
-import MyIcon from 'src/components/MyIcon/MyIcon'
+import Icon from 'src/components/Icon'
 
 interface UserPorfileProps {
   user: UserContextType
 }
 
+// TODO: 使用headlessui和tailwindcss重构
+/**
+ * 用户操作组件
+ */
 export default function UserProfile(props: UserPorfileProps) {
   const { value: user, dispatch } = props.user
 
   const [avatarClassNames, setAvatarClassNames] = useState(classes['avatar'])
+
+  if (!user) {
+    return null
+  }
 
   const items = [
     {
@@ -19,9 +27,9 @@ export default function UserProfile(props: UserPorfileProps) {
       text: '我的主页',
       clickHandler: () => {
         /** todo */
-      },
+      }
     },
-    { name: 'signout', text: '退出', clickHandler: () => dispatch('reset') },
+    { name: 'signout', text: '退出', clickHandler: () => dispatch('reset') }
   ]
 
   const handleOpen = () => {
@@ -34,29 +42,27 @@ export default function UserProfile(props: UserPorfileProps) {
 
   return (
     <Popup
-      trigger={
-        <img src={user?.avatar} alt={`${user?.name}'s avatar`} className={avatarClassNames} />
-      }
+      trigger={<img src={user.avatar} alt={`${user.name}'s avatar`} className={avatarClassNames} />}
       basic
       hoverable
       hideOnScroll
       on="hover"
       position="bottom center"
       mouseEnterDelay={200}
-      offset={[0, -40]}
+      offset={[0, -30]}
       onOpen={handleOpen}
       onClose={handleClose}
       className={classes['popup-modal-override']}
     >
       <>
-        <img src={user?.avatar} alt={`${user?.name}'s avatar`} className={classes['popup-avatar']} />
+        <img src={user.avatar} alt={`${user.name}'s avatar`} className={classes['popup-avatar']} />
         <div className={classes['content']}>
-          <h2 className={classes['popup-name']}>{user?.name}</h2>
+          <h2 className={classes['popup-name']}>{user.name}</h2>
           <Menu vertical secondary fluid compact>
             {items.map((item) => (
               <Menu.Item key={item.name} name={item.name} onClick={item.clickHandler}>
                 <span className={classes['menu-item']}>
-                  <MyIcon name={item.name} />
+                  <Icon name={item.name} />
                   <span className={classes['menu-item-text']}>{item.text}</span>
                 </span>
               </Menu.Item>

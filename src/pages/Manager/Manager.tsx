@@ -6,9 +6,9 @@ import classes from './Manager.module.css'
 import Service from 'src/utils/services'
 import type { Article } from 'src/typings'
 import Card from 'src/components/Card/Card'
-import Refresh from 'src/components/Refresh/Refresh'
+import Refresh from 'src/views/Refresh'
 import Modal from 'src/components/MyModal/MyModal'
-import MyIcon from 'src/components/MyIcon/MyIcon'
+import Icon from 'src/components/Icon'
 import buildTree from 'src/utils/build-tree'
 import type { ANode } from 'src/utils/build-tree'
 import { removeExt } from 'src/utils'
@@ -174,7 +174,7 @@ function ArticleManager() {
           <List.Header>
             <span className="margin-right-20 fontsize-large">{node.name}</span>
             <span>
-              <MyIcon
+              <Icon
                 name="modify"
                 className="cursor-pointer fontsize-large margin-right-10"
                 onClick={() => {
@@ -186,14 +186,14 @@ function ArticleManager() {
               />
               <Popup
                 basic
-                trigger={<MyIcon name="delete" className="cursor-pointer fontsize-large" />}
+                trigger={<Icon name="delete" className="cursor-pointer fontsize-large" />}
                 on="click"
                 eventsEnabled={false}
                 hideOnScroll
                 size="mini"
               >
                 <h4>确认删除?</h4>
-                <Button size="mini" color="red" onClick={() => document.body.click()}>
+                <Button size="mini" color="red" onClick={document.body.click}>
                   取消
                 </Button>
                 <Button size="mini" color="teal" onClick={() => handleArticleDelete(node.id)}>

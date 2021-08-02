@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import classNames from 'classnames'
-import MyIcon from 'src/components/MyIcon/MyIcon'
+import Icon from 'src/components/Icon'
 
 interface RefreshProps {
   onClick: () => Promise<unknown>
@@ -12,19 +12,15 @@ export default function Refresh(props: RefreshProps) {
   const handleClick = () => {
     setLoading(true)
     setTimeout(() => {
-      props.onClick().then(
-        () => setLoading(false),
-        () => setLoading(false)
-      )
+      props.onClick().finally(() => setLoading(false))
     }, 500)
   }
 
   return (
-    <MyIcon
+    <Icon
       name="refresh"
-      style={{ fontSize: 30 }}
-      className={classNames('cursor-pointer', { spin: loading })}
+      className={classNames('cursor-pointer', 'text-3xl', { 'animate-spin': loading })}
       onClick={handleClick}
-    ></MyIcon>
+    />
   )
 }

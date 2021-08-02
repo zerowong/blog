@@ -4,17 +4,16 @@ import reactRefresh from '@vitejs/plugin-react-refresh'
 export default defineConfig({
   plugins: [reactRefresh()],
   server: {
-    port: 8082,
-    https: true,
+    port: 8082
   },
   css: {
     modules: {
-      generateScopedName: '[local]_[hash:base64:5]',
-    },
+      generateScopedName: '[local]_[hash:base64:5]'
+    }
   },
   resolve: {
     alias: {
-      src: '/src',
-    },
-  },
+      src: '/src'
+    }
+  }
 })

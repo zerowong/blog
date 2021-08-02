@@ -1,6 +1,6 @@
 import React from 'react'
 import type { DetailedHTMLProps, AnchorHTMLAttributes } from 'react'
-import classNames from 'classnames/bind'
+import classNames from 'classnames'
 import classes from './MyLink.module.css'
 
 export default function MyLink(

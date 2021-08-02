@@ -2,13 +2,15 @@
   "typescript.tsdk": ".yarn/sdks/typescript/lib",
   "emmet.showExpandedAbbreviation": "inMarkupAndStylesheetFilesOnly",
   "material-icon-theme.activeIconPack": "react",
-  "typescript.suggest.autoImports": false,
-  "javascript.suggest.autoImports": false,
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true
   },
   "eslint.nodePath": ".yarn/sdks",
   "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
-  "typescript.enablePromptUseWorkspaceTsdk": true
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "css.lint.unknownAtRules": "ignore",
+  "javascript.suggest.autoImports": false,
+  "typescript.preferences.includePackageJsonAutoImports": "off",
+  "typescript.suggest.autoImports": false
 }

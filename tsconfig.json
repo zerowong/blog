@@ -15,5 +15,6 @@
     "jsx": "react",
     "baseUrl": "./"
   },
-  "include": ["./src"]
+  "include": ["./src"],
+  "exclude": ["tailwind.config.js", "postcss.config.js", "vite.config.ts"]
 }

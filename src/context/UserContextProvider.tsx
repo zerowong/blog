@@ -5,11 +5,11 @@ import type { UserContextType } from 'src/typings'
 
 export const UserContext = createContext<UserContextType>({
   value: null,
-  dispatch: async () => {},
+  dispatch: async () => {}
 })
 
 /**
- * 用户上下文组件
+ * 用户上下文Provider
  */
 export default function UserContextProvider(props: PropsWithChildren<unknown>) {
   const [user, setUser] = useState<UserContextType['value']>(null)
