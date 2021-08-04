@@ -12,5 +12,6 @@
   "css.lint.unknownAtRules": "ignore",
   "javascript.suggest.autoImports": false,
   "typescript.preferences.includePackageJsonAutoImports": "off",
-  "typescript.suggest.autoImports": false
+  "typescript.suggest.autoImports": false,
+  "eslint.packageManager": "yarn"
 }
