@@ -13,5 +13,6 @@
   "javascript.suggest.autoImports": false,
   "typescript.preferences.includePackageJsonAutoImports": "off",
   "typescript.suggest.autoImports": false,
-  "eslint.packageManager": "yarn"
+  "eslint.packageManager": "yarn",
+  "eslint.alwaysShowStatus": true
 }

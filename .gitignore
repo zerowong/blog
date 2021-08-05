@@ -16,4 +16,3 @@ dist-ssr
 !.yarn/releases
 !.yarn/sdks
 # !.yarn/versions
-/.pnp.js
