@@ -1,5 +1,3 @@
-import type { User } from './schema'
-
 export interface CommonResponse {
   message: string
 }
@@ -7,11 +5,6 @@ export interface CommonResponse {
 export interface CaptchaParams {
   Ticket: string
   Randstr: string
-}
-
-export interface UserContextType {
-  readonly value: User | null
-  readonly dispatch: (action: 'fetch' | 'reset') => Promise<void>
 }
 
 /**

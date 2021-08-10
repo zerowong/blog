@@ -7,19 +7,20 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans]
-      }
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+      },
     },
     colors: {
       teal: colors.teal,
       green: colors.green,
-      'light-blue': colors.sky,
+      sky: colors.sky,
       blue: colors.blue,
-      gray: colors.gray
-    }
+      gray: colors.gray,
+      white: colors.white,
+    },
   },
   variants: {
-    extend: {}
+    extend: {},
   },
-  plugins: []
+  plugins: [],
 }

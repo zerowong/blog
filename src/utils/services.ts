@@ -9,9 +9,12 @@ import type {
 } from 'src/typings'
 
 const request = new MyRequest({
-  baseURL: import.meta.env.DEV ? 'https://localhost:3000' : 'https://api.apasser.xyz',
+  baseURL: import.meta.env.DEV ? 'https://api.apasser.xyz/dev' : 'https://api.apasser.xyz',
 })
 
+/**
+ * 处理url查询字符串
+ */
 function handleQuery(query?: RequestQuery) {
   if (!query) {
     return ''
@@ -28,6 +31,9 @@ function handleQuery(query?: RequestQuery) {
   return `?${queries.join('&')}`
 }
 
+/**
+ * 处理url参数
+ */
 function handleParameters(parameters: Record<string, string>) {
   return Object.values(parameters).join('/')
 }

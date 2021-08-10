@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { toast } from 'react-toastify'
 
 interface MyRequestConfig {

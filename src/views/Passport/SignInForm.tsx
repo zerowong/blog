@@ -3,7 +3,7 @@ import { Form, Button } from 'semantic-ui-react'
 import { toast } from 'react-toastify'
 import useCaptcha from 'src/hooks/useCaptcha'
 import useInputChangeHandler from 'src/hooks/useInputChangeHandler'
-import useUser from 'src/hooks/useUser'
+import { useStore } from 'src/context'
 import Service from 'src/utils/services'
 
 interface SignInFormProps {
@@ -18,7 +18,7 @@ export default function SignInForm(props: SignInFormProps) {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const user = useUser()
+  const store = useStore()
 
   const captcha = useCaptcha(async (res) => {
     if (res.ret === 0) {
@@ -30,7 +30,7 @@ export default function SignInForm(props: SignInFormProps) {
           mail: email,
           pass: password,
         })
-        await user.dispatch('fetch')
+        await store.dispatch('fetchUser')
         toast.success(signInRes.message)
         setLoading(false)
         props.closeModal()

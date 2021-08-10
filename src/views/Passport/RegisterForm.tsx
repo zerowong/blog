@@ -3,7 +3,7 @@ import { Form, Button } from 'semantic-ui-react'
 import { toast } from 'react-toastify'
 import useCaptcha from 'src/hooks/useCaptcha'
 import useInputChangeHandler from 'src/hooks/useInputChangeHandler'
-import useUser from 'src/hooks/useUser'
+import { useStore } from 'src/context'
 import Service from 'src/utils/services'
 
 interface RegisterFormProps {
@@ -24,7 +24,7 @@ export default function RegisterForm(props: RegisterFormProps) {
 
   const [loading, setLoading] = useState(false)
 
-  const user = useUser()
+  const store = useStore()
 
   const captcha = useCaptcha(async (res) => {
     if (res.ret === 0) {
@@ -37,7 +37,7 @@ export default function RegisterForm(props: RegisterFormProps) {
           pass: password,
           name: username,
         })
-        await user.dispatch('fetch')
+        await store.dispatch('fetchUser')
         toast.success(registerRes.message)
         setLoading(false)
         props.closeModal()
