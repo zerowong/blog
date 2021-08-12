@@ -8,6 +8,7 @@ interface IconProps extends SVGProps<SVGSVGElement> {
 
 /**
  * iconfont组件
+ * @param name 图标名
  */
 export default function Icon(props: IconProps) {
   const { name, className, ...rest } = props

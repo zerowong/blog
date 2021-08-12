@@ -18,9 +18,8 @@ module.exports = {
       gray: colors.gray,
       white: colors.white,
     },
+    screens: {
+      md: defaultTheme.screens.md,
+    },
   },
-  variants: {
-    extend: {},
-  },
-  plugins: [],
 }
