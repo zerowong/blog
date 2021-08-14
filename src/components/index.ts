@@ -1,4 +1,4 @@
-import Icon from './Icon'
-import Button from './Button'
+import Icon from './icon'
+import Button from './button'
 
 export { Icon, Button }
