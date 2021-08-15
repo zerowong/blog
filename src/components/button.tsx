@@ -52,7 +52,6 @@ export default function Button(props: ButtonProps) {
     children,
     className,
     color = 'teal',
-    onClick,
     icon,
     block,
     text,
@@ -78,12 +77,7 @@ export default function Button(props: ButtonProps) {
         },
         className
       )}
-      onClick={(e) => {
-        // 文本模式始终响应单击事件
-        if (text || !loading) {
-          return onClick?.(e)
-        }
-      }}
+      disabled={loading || rest.disabled}
       {...rest}
     >
       {text ? (
