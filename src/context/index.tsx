@@ -2,8 +2,8 @@ import React, { createContext, useContext } from 'react'
 import type { PropsWithChildren } from 'react'
 import Service from 'src/utils/services'
 import type { User, Nullable } from 'src/typings'
-import createStore from './simpleVuex'
-import type { Store } from './simpleVuex'
+import createStore from './react-vuex'
+import type { Store } from './react-vuex'
 
 interface State {
   user: Nullable<User>

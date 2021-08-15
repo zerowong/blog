@@ -23,21 +23,26 @@ interface Option<State> {
 }
 
 export interface Store<State> {
-  state: State
-  commit: (type: string, ...payload: any[]) => void
-  dispatch: (type: string, ...payload: any[]) => Promise<void>
+  readonly state: State
+  readonly commit: (type: string, ...payload: any[]) => void
+  readonly dispatch: (type: string, ...payload: any[]) => Promise<void>
 }
 
-export default function CreateStore<State>(option: Option<State>): Store<State> {
-  const [state, _commit] = useReducer((state: State, action: { type: string; payload: any[] }) => {
-    const targetMutation = option.mutations[action.type]
-    if (typeof targetMutation === 'function') {
-      // 外部做一次浅拷贝，mutation里可直接返回state
-      const newState = { ...state }
-      return targetMutation(newState, ...action.payload)
-    }
-    return state
-  }, option.state)
+export default function CreateStore<State>(
+  option: Option<State>
+): Store<State> {
+  const [state, _commit] = useReducer(
+    (state: State, action: { type: string; payload: any[] }) => {
+      const targetMutation = option.mutations[action.type]
+      if (typeof targetMutation === 'function') {
+        // 外部做一次浅拷贝，mutation里可直接返回state
+        const newState = { ...state }
+        return targetMutation(newState, ...action.payload)
+      }
+      return state
+    },
+    option.state
+  )
 
   const commit = useCallback<Store<State>['commit']>((type, ...payload) => {
     return _commit({ type, payload })
