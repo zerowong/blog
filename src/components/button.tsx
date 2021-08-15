@@ -4,10 +4,25 @@ import { Transition } from '@headlessui/react'
 import Icon from './icon'
 
 type ButtonProps = JSX.IntrinsicElements['button'] & {
+  /**
+   * 加载态，加载时按钮为`disabled`状态
+   */
   loading?: boolean
+  /**
+   * 颜色
+   */
   color?: 'teal' | 'green' | 'sky' | 'blue' | 'gray' | 'red'
+  /**
+   * 图标，置于左侧
+   */
   icon?: React.ReactNode
+  /**
+   * 适应容器宽度
+   */
   block?: boolean
+  /**
+   * 文本模式，该模式下将只有`color`,`block`生效
+   */
   text?: boolean
 }
 
@@ -40,11 +55,6 @@ const textColorClassMap = {
 
 /**
  * 按钮
- * @param loading 加载态，加载中不响应单击事件
- * @param color 颜色
- * @param icon 图标，置于左侧
- * @param block 适应容器宽度
- * @param text 文本模式，该模式下将只有`color`,`block`生效
  */
 export default function Button(props: ButtonProps) {
   const {
@@ -86,10 +96,10 @@ export default function Button(props: ButtonProps) {
         <>
           <Transition
             show={loading && !icon}
-            enter="transition-all duration-300"
+            enter="transition-all ease-out duration-300"
             enterFrom="transform-gpu opacity-0 scale-0 w-0"
             enterTo="transform-gpu opacity-100 scale-100 w-5"
-            leave="transition-all duration-300"
+            leave="transition-all ease-in duration-200"
             leaveFrom="transform-gpu opacity-100 scale-100 w-5"
             leaveTo="transform-gpu opacity-0 scale-0 w-0"
           >

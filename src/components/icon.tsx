@@ -2,12 +2,14 @@ import React from 'react'
 import classNames from 'classnames'
 
 type IconProps = JSX.IntrinsicElements['svg'] & {
+  /**
+   * 图标名
+   */
   name: string
 }
 
 /**
  * iconfont组件
- * @param name 图标名
  */
 export default function Icon(props: IconProps) {
   const { name, className, ...rest } = props
