@@ -5,35 +5,41 @@ import { Disclosure, Transition } from '@headlessui/react'
 import { Icon } from 'src/components'
 import { useMatchQuery } from 'src/hooks'
 import UserProfile from './UserPorfile/UserProfile'
-import Passport from './Passport/Passport'
+import Passport from './passport'
 import { useStore } from 'src/context'
 
 interface LocationState {
   name: string
 }
 
-const navigation = [
+interface Navigation {
+  to: string
+  name: string
+  key: 'home' | 'articles' | 'comments'
+}
+
+const navigation: Navigation[] = [
   { to: '/', name: '首页', key: 'home' },
   { to: '/articles', name: '文章', key: 'articles' },
   { to: '/comments', name: '留言', key: 'comments' },
 ]
 
-const iconClassMap: Record<string, string> = {
-  home: 'text-teal-500',
-  articles: 'text-green-500',
-  comments: 'text-blue-500',
+const iconClassMap = {
+  'home': 'text-teal-500',
+  'articles': 'text-green-500',
+  'comments': 'text-blue-500',
 }
 
-const navLinkHoverClassMap: Record<string, string> = {
-  home: 'hover:bg-teal-100 hover:text-teal-500',
-  articles: 'hover:bg-green-100 hover:text-green-500',
-  comments: 'hover:bg-blue-100 hover:text-blue-500',
+const navLinkHoverClassMap = {
+  'home': 'hover:bg-teal-100 hover:text-teal-500',
+  'articles': 'hover:bg-green-100 hover:text-green-500',
+  'comments': 'hover:bg-blue-100 hover:text-blue-500',
 }
 
-const navLinkActiveClassMap: Record<string, string> = {
-  home: 'bg-teal-100 text-teal-500',
-  articles: 'bg-green-100 text-green-500',
-  comments: 'bg-blue-100 text-blue-500',
+const navLinkActiveClassMap = {
+  'home': 'bg-teal-100 text-teal-500',
+  'articles': 'bg-green-100 text-green-500',
+  'comments': 'bg-blue-100 text-blue-500',
 }
 
 /**
@@ -53,10 +59,13 @@ export default function NavBar() {
   return (
     <Disclosure>
       {({ open }) => (
-        <nav className="px-4 sm:px-6 lg:px-8 shadow-md">
-          <div className="h-16 flex items-center justify-between lg:justify-around">
+        <nav className="px-4 md:px-8 shadow">
+          <div className="h-16 flex items-center justify-between md:justify-around">
             <div className="flex items-center">
-              <a href="/" className="text-2xl font-bold flex-shrink-0 text-sky-500">
+              <a
+                href="/"
+                className="text-2xl font-bold flex-shrink-0 text-sky-500"
+              >
                 ApassEr
               </a>
             </div>
@@ -69,14 +78,17 @@ export default function NavBar() {
                       to={{ pathname: item.to, state: { name: item.name } }}
                       key={item.to}
                       className={classNames(
-                        'p-3 text-2xl rounded-xl transition-colors flex items-center',
+                        'p-3 text-2xl rounded-xl transition-colors inline-flex items-center',
                         navLinkHoverClassMap[item.key]
                       )}
                       activeClassName={navLinkActiveClassMap[item.key]}
                     >
                       <Icon
                         name={item.key}
-                        className={classNames('text-2xl mr-1', iconClassMap[item.key])}
+                        className={classNames(
+                          'text-2xl mr-1',
+                          iconClassMap[item.key]
+                        )}
                       />
                       {item.name}
                     </NavLink>
@@ -84,9 +96,13 @@ export default function NavBar() {
                 </div>
                 <div className="flex items-center space-x-8">
                   <button className="text-gray-500 hover:text-gray-600">
-                    <Icon name="notify" className="text-3xl" />
+                    <Icon name="notify" className="text-2xl" />
                   </button>
-                  {store.state.user ? <UserProfile user={store.state.user} /> : <Passport />}
+                  {store.state.user ? (
+                    <UserProfile user={store.state.user} />
+                  ) : (
+                    <Passport />
+                  )}
                 </div>
               </>
             )}
@@ -120,7 +136,10 @@ export default function NavBar() {
                   >
                     <Icon
                       name={item.key}
-                      className={classNames('text-2xl mr-1', iconClassMap[item.key])}
+                      className={classNames(
+                        'text-2xl mr-1',
+                        iconClassMap[item.key]
+                      )}
                     />
                     {item.name}
                   </Disclosure.Button>

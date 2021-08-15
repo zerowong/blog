@@ -1,5 +1,10 @@
 import React, { Suspense, lazy, StrictMode } from 'react'
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { NavBar, InitialEffect } from 'src/views'
 import { StoreContextProvider } from 'src/context'
@@ -16,7 +21,7 @@ export default function App() {
         <StoreContextProvider>
           <InitialEffect />
           <NavBar />
-          <main className="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+          <main className="max-w-7xl mx-auto px-4 py-6 md:px-8">
             <Suspense fallback={null}>
               <Switch>
                 <Route exact path="/" component={Home} />

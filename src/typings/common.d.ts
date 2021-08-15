@@ -26,8 +26,3 @@ export interface RequestQuery {
   page?: string
   limit?: string
 }
-
-/**
- * 在tailwind.config.js中已配置的颜色
- */
-export type Colors = 'teal' | 'green' | 'sky' | 'blue' | 'gray'

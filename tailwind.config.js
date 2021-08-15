@@ -17,6 +17,8 @@ module.exports = {
       blue: colors.blue,
       gray: colors.gray,
       white: colors.white,
+      black: colors.black,
+      red: colors.red,
     },
     screens: {
       md: defaultTheme.screens.md,
