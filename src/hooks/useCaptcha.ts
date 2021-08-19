@@ -32,7 +32,7 @@ declare class TencentCaptcha {
  * @param callback 验证码对象回调函数
  * @returns 验证码对象
  */
-export default function useCaptcha(callback: CaptchaCallback) {
+export function useCaptcha(callback: CaptchaCallback) {
   const captcha = useMemo(() => {
     return new TencentCaptcha('2054543757', callback)
   }, [callback])

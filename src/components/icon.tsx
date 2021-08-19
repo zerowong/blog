@@ -11,7 +11,7 @@ type IconProps = JSX.IntrinsicElements['svg'] & {
 /**
  * iconfont组件
  */
-export default function Icon(props: IconProps) {
+export function Icon(props: IconProps) {
   const { name, className, ...rest } = props
   return (
     <svg

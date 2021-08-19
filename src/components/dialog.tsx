@@ -20,7 +20,7 @@ type DialogProps = Parameters<typeof HeadlessDialog>[0] & {
 /**
  * 对话框
  */
-export default function Dialog(props: DialogProps) {
+export function Dialog(props: DialogProps) {
   const {
     open = false,
     children,

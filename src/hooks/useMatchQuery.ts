@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 /**
  * 监听媒体查询
  */
-export default function useMatchQuery(query: string) {
+export function useMatchQuery(query: string) {
   const [match, setMatch] = useState(window.matchMedia(query).matches)
 
   useEffect(() => {

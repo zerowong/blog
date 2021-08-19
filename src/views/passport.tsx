@@ -4,7 +4,7 @@ import { Button, Dialog } from 'src/components'
 /**
  * 登录及注册模态框
  */
-export default function Passport() {
+export function Passport() {
   const [isOpen, setIsOpen] = useState(false)
 
   const closeModal = () => {

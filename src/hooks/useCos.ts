@@ -12,24 +12,27 @@ const cos = new COS({
           SecurityToken: tempCred.credentials.sessionToken,
           StartTime: tempCred.startTime,
           ExpiredTime: tempCred.expiredTime,
-          ScopeLimit: true
+          ScopeLimit: true,
         })
       },
       () => {}
     )
-  }
+  },
 })
 
-export default function useCos() {
+/**
+ * 腾讯云cos存储
+ */
+export function useCos() {
   const cosRef = useRef({
     putObject(key: string, body: File) {
       return cos.putObject({
         Bucket: 'blog-1302895217',
         Region: 'ap-nanjing',
         Key: key,
-        Body: body
+        Body: body,
       })
-    }
+    },
   })
 
   return cosRef.current

@@ -1,5 +1,3 @@
-import useCaptcha from './useCaptcha'
-import useMatchQuery from './useMatchQuery'
-import useCos from './useCos'
-
-export { useCaptcha, useMatchQuery, useCos }
+export * from './useCaptcha'
+export * from './useMatchQuery'
+export * from './useCos'

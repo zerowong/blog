@@ -5,11 +5,11 @@ import { useStore } from 'src/context'
 /**
  * 初始化应用全局数据
  */
-export default function InitialEffect() {
-  const store = useStore()
+export function InitialEffect() {
+  const { dispatch } = useStore()
 
   useEffect(() => {
-    store.dispatch('fetchUser')
+    dispatch('fetchUser')
   }, [])
 
   return null

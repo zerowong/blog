@@ -5,7 +5,7 @@ import { Disclosure, Transition } from '@headlessui/react'
 import { Icon } from 'src/components'
 import { useMatchQuery } from 'src/hooks'
 import UserProfile from './UserPorfile/UserProfile'
-import Passport from './passport'
+import { Passport } from './passport'
 import { useStore } from 'src/context'
 
 interface LocationState {
@@ -45,7 +45,7 @@ const navLinkActiveClassMap = {
 /**
  * 顶部导航栏
  */
-export default function NavBar() {
+export function NavBar() {
   const location = useLocation<LocationState | undefined>()
   const mediumScreen = useMatchQuery('screen and (min-width: 768px)')
   const store = useStore()
