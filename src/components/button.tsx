@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import { Transition } from '@headlessui/react'
-import Icon from './icon'
+import { Icon } from './icon'
 
 type ButtonProps = JSX.IntrinsicElements['button'] & {
   /**
@@ -24,6 +24,10 @@ type ButtonProps = JSX.IntrinsicElements['button'] & {
    * 文本模式，该模式下将只有`color`,`block`生效
    */
   text?: boolean
+  /**
+   * 链接模式，该模式下将只有`color`,`block`生效
+   */
+  link?: boolean
 }
 
 const colorClassMap = {
@@ -56,7 +60,7 @@ const textColorClassMap = {
 /**
  * 按钮
  */
-export default function Button(props: ButtonProps) {
+export function Button(props: ButtonProps) {
   const {
     loading = false,
     children,
@@ -65,6 +69,7 @@ export default function Button(props: ButtonProps) {
     icon,
     block,
     text,
+    link,
     ...rest
   } = props
 
@@ -73,24 +78,25 @@ export default function Button(props: ButtonProps) {
       className={classNames(
         {
           'inline-flex justify-center items-center rounded-md px-4 py-2 shadow-sm transition-colors duration-300 text-center':
-            !text,
-          // 文本模式无背景色和文字颜色加深
-          [colorClassMap[color]]: !text,
-          // 文本模式、加载中、禁用时没有聚焦边框
+            !(text || link),
+          // 文本、链接模式无背景色和文字颜色加深
+          [colorClassMap[color]]: !(text || link),
+          // 文本、链接模式、加载中、禁用时没有聚焦边框
           [`focus:ring-2 ${focusColorClassMap[color]}`]:
-            !text && !(loading || rest.disabled),
-          // 文本模式颜色
-          [textColorClassMap[color]]: text,
-          // 不是文本模式且为加载中或禁用时
-          'cursor-not-allowed opacity-40': !text && (loading || rest.disabled),
+            !(text || link) && !(loading || rest.disabled),
+          // 文本、链接模式颜色
+          [textColorClassMap[color]]: text || link,
+          // 加载中或禁用时
+          'cursor-not-allowed opacity-40': loading || rest.disabled,
           'w-full': block,
+          'hover:underline': link,
         },
         className
       )}
       disabled={loading || rest.disabled}
       {...rest}
     >
-      {text ? (
+      {text || link ? (
         children
       ) : (
         <>
