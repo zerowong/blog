@@ -24,4 +24,10 @@ module.exports = {
       md: defaultTheme.screens.md,
     },
   },
+  variants: {
+    extend: {
+      cursor: ['disabled'],
+      opacity: ['disabled'],
+    },
+  },
 }

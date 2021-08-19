@@ -40,12 +40,12 @@ const colorClassMap = {
 }
 
 const focusColorClassMap = {
-  'teal': 'hover:bg-teal-200 focus:ring-teal-200',
-  'green': 'hover:bg-green-200 focus:ring-green-200',
-  'sky': 'hover:bg-sky-200 focus:ring-sky-200',
-  'blue': 'hover:bg-blue-200 focus:ring-blue-200',
-  'gray': 'hover:bg-gray-200 focus:ring-gray-200',
-  'red': 'hover:bg-red-200 focus:ring-red-200',
+  'teal': 'hover:bg-teal-200 focus:ring-teal-300',
+  'green': 'hover:bg-green-200 focus:ring-green-300',
+  'sky': 'hover:bg-sky-200 focus:ring-sky-300',
+  'blue': 'hover:bg-blue-200 focus:ring-blue-300',
+  'gray': 'hover:bg-gray-200 focus:ring-gray-300',
+  'red': 'hover:bg-red-200 focus:ring-red-300',
 }
 
 const textColorClassMap = {
@@ -70,30 +70,30 @@ export function Button(props: ButtonProps) {
     block,
     text,
     link,
+    disabled,
     ...rest
   } = props
 
   return (
     <button
       className={classNames(
+        'disabled:cursor-not-allowed disabled:opacity-50 my-3',
         {
-          'inline-flex justify-center items-center rounded-md px-4 py-2 shadow-sm transition-colors duration-300 text-center':
+          'inline-flex justify-center items-center rounded-md px-4 py-2 shadow-sm transition duration-300 text-center':
             !(text || link),
           // 文本、链接模式无背景色和文字颜色加深
           [colorClassMap[color]]: !(text || link),
-          // 文本、链接模式、加载中、禁用时没有聚焦边框
+          // 文本、链接模式在加载中、禁用时没有聚焦边框
           [`focus:ring-2 ${focusColorClassMap[color]}`]:
-            !(text || link) && !(loading || rest.disabled),
+            !(text || link) && !(loading || disabled),
           // 文本、链接模式颜色
           [textColorClassMap[color]]: text || link,
-          // 加载中或禁用时
-          'cursor-not-allowed opacity-40': loading || rest.disabled,
           'w-full': block,
           'hover:underline': link,
         },
         className
       )}
-      disabled={loading || rest.disabled}
+      disabled={loading || disabled}
       {...rest}
     >
       {text || link ? (
