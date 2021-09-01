@@ -28,6 +28,14 @@ type ButtonProps = JSX.IntrinsicElements['button'] & {
    * 链接模式，该模式下将只有`color`,`block`生效
    */
   link?: boolean
+  /**
+   * 容器类名
+   */
+  wrapperClassName?: string
+  /**
+   * 容器样式
+   */
+  wrapperStyle?: React.CSSProperties
 }
 
 const colorClassMap = {
@@ -65,12 +73,14 @@ export function Button(props: ButtonProps) {
     loading = false,
     children,
     className,
-    color = 'teal',
+    color = 'sky',
     icon,
     block,
     text,
     link,
     disabled,
+    wrapperClassName,
+    wrapperStyle,
     ...rest
   } = props
 
@@ -111,7 +121,7 @@ export function Button(props: ButtonProps) {
           >
             <Icon name="loading" className="animate-spin mr-1" />
           </Transition>
-          <div>
+          <div className={wrapperClassName} style={wrapperStyle}>
             {icon && (
               <span className={classNames({ 'mr-1': children })}>
                 {loading ? (
