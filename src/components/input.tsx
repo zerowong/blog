@@ -128,8 +128,8 @@ export function Input(props: InputProps) {
           'w-75': inline,
           'cursor-text': !disabled,
           'bg-gray-300': disabled,
-          'hover:border-teal-500': bordered && !disabled,
-          'border-teal-500': bordered && inputIsFocus,
+          'hover:border-sky-500': bordered && !disabled,
+          'border-sky-500': bordered && inputIsFocus,
         },
         wrapperClassName
       )}
