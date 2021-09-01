@@ -9,6 +9,9 @@ module.exports = {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
+      spacing: {
+        '75': '18.75rem',
+      },
     },
     colors: {
       teal: colors.teal,
@@ -28,6 +31,8 @@ module.exports = {
     extend: {
       cursor: ['disabled'],
       opacity: ['disabled'],
+      backgroundColor: ['disabled'],
+      textColor: ['disabled'],
     },
   },
 }
