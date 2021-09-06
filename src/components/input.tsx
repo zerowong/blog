@@ -21,6 +21,10 @@ type InputProps = JSX.IntrinsicElements['input'] & {
    */
   clearable?: boolean
   /**
+   * 输入框点击清空按钮时触发
+   */
+  onClear?: () => void
+  /**
    * 内联模式
    */
   inline?: boolean
@@ -41,21 +45,11 @@ export function Input(props: InputProps) {
     disabled,
     onFocus,
     onBlur,
+    onClear,
     ...rest
   } = props
 
-  const [innerValue, setInnerValue] = useState(() => {
-    if (typeof defaultValue === 'string') {
-      return defaultValue
-    }
-    if (typeof defaultValue === 'number') {
-      return defaultValue.toString()
-    }
-    if (defaultValue instanceof Array) {
-      return defaultValue.join(',')
-    }
-    return ''
-  })
+  const [innerValue, setInnerValue] = useState(defaultValue)
   const handleValueChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setInnerValue(e.target.value)
   }
@@ -79,6 +73,27 @@ export function Input(props: InputProps) {
   }
 
   const [innerType, setInnerType] = useState(type)
+
+  const valueToStr = (arg: typeof value) => {
+    if (typeof arg === 'string') {
+      return arg
+    }
+    if (typeof arg === 'number') {
+      return arg.toString()
+    }
+    if (arg instanceof Array) {
+      return arg.join(',')
+    }
+    return ''
+  }
+
+  const resetValue = () => {
+    if (value === undefined || value === null) {
+      setInnerValue('')
+    }
+    onClear?.()
+  }
+
   const renderIcon = (type?: string) => {
     switch (type) {
       case 'password':
@@ -96,7 +111,10 @@ export function Input(props: InputProps) {
           <Transition
             as="span"
             show={
-              clearable && innerValue.length > 0 && wrapperHover && !disabled
+              clearable &&
+              valueToStr(value ?? innerValue).length > 0 &&
+              wrapperHover &&
+              !disabled
             }
             enter="transition ease-out duration-300"
             enterFrom="transform-gpu opacity-0 scale-0"
@@ -109,9 +127,7 @@ export function Input(props: InputProps) {
             <Icon
               name="close-fill"
               className="text-gray-400 cursor-pointer hover:text-gray-500"
-              onClick={() => {
-                setInnerValue('')
-              }}
+              onClick={resetValue}
             />
           </Transition>
         )
