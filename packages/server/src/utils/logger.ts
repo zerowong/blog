@@ -11,11 +11,11 @@ export class Logger {
     // 确保文件存在
     fs.appendFileSync(logPath, '')
     const errOut = fs.createWriteStream(logPath, { flags: 'a' })
-    errOut.once('ready', () => console.log(`[Logger] ${type} log wirte stream is ready`))
+    errOut.once('ready', () => console.log(`[SERVER]] ${type} log wirte stream is ready`))
     this.console = new console.Console(process.stdout, errOut)
   }
 
-  error(err: any) {
+  error(err: Error) {
     this.console.error(new Date().toLocaleString('zh-CN', { hourCycle: 'h23' }), err)
   }
 }

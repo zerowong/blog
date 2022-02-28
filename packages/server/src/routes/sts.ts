@@ -1,18 +1,16 @@
 import Router from '@koa/router'
 import STS from 'qcloud-cos-sts'
-import UserTokenAuth from '../middlewares/user-token-auth'
-import AdminAuth from '../middlewares/admin-auth'
-import { errorText } from '../utils/status-text'
-import { tencentCret } from '../utils/config'
+import { userTokenAuth, adminAuth } from '../middlewares'
+import { serverConfig, errors } from '../utils'
 
 const router = new Router()
+
+router.use(['/sts'], userTokenAuth, adminAuth)
 
 /**
  * 临时密钥服务
  */
-router.get('/sts', UserTokenAuth, AdminAuth, async (ctx) => {
-  // prefix = dir/name.ext
-  // const { prefix } = ctx.request.body
+router.get('/sts', async (ctx) => {
   const policy = STS.getPolicy([
     {
       action: 'name/cos:PutObject',
@@ -21,17 +19,16 @@ router.get('/sts', UserTokenAuth, AdminAuth, async (ctx) => {
       prefix: '*',
     },
   ])
-  try {
-    const tempCred = await STS.getCredential({
-      secretId: tencentCret.credential.secretId,
-      secretKey: tencentCret.credential.secretKey,
-      policy,
-    })
-    ctx.status = 200
-    ctx.body = tempCred
-  } catch {
-    ctx.throw(500, errorText.COS_TEMP_CRED_GET_FAIL)
+  const tempCred = await STS.getCredential({
+    secretId: serverConfig.credential.secretId,
+    secretKey: serverConfig.credential.secretKey,
+    policy,
+  }).catch(() => null)
+  if (!tempCred) {
+    return ctx.throw(404, errors.COS_TEMP_CRED_GET_FAIL)
   }
+  ctx.body = tempCred
+  ctx.status = 200
 })
 
 export default router.routes()

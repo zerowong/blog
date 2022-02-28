@@ -1,74 +1,96 @@
 import http2 from 'http2'
-import type { SecureServerOptions } from 'http2'
+import http from 'http'
+import type { Http2SecureServer } from 'http2'
+import type { Server } from 'http'
 import fs from 'fs'
-import Koa from 'koa'
-import Helmet from 'koa-helmet'
-import Cors from '@koa/cors'
-import BodyParser from 'koa-bodyparser'
-import Logger from 'koa-logger'
+import koa from 'koa'
+import helmet from 'koa-helmet'
+import cors from '@koa/cors'
+import bodyParser from 'koa-bodyparser'
+import logger from 'koa-logger'
 import mongoose from 'mongoose'
 import router from './routes'
-import { CORS_ORIGIN, A_WEEK, SERVER_KEY_PATH, SERVER_CRT_PATH, dbConfig } from './utils'
-import ErrorHanlder from './middlewares/error-handler'
+import { CORS_ORIGIN, SERVER_KEY_PATH, SERVER_CRT_PATH, serverConfig } from './utils'
+import { errorHanlder } from './middlewares'
 
 /**
  * 连接数据库
  */
 async function connectDb() {
-  const dbNameMap: Record<string, string> = {
-    prod: 'blog',
-    dev: 'blog-dev',
-    test: 'blog-test'
-  }
-  const dbName = dbNameMap[process.env.NODE_ENV ?? 'prod']
-  const dbPath = `mongodb://localhost/${dbName}`
-  try {
-    await mongoose.connect(dbPath, {
-      user: dbConfig.user,
-      pass: dbConfig.pass,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      autoIndex: false,
-      useFindAndModify: false
-    })
-    console.log(`[mongodb] ${dbPath} connect successfully`)
-  } catch (err) {
-    throw err
-  }
+  await mongoose.connect('mongodb://localhost/blog', {
+    user: serverConfig.db.user,
+    pass: serverConfig.db.pass,
+  })
+  const { user, name, host, port } = mongoose.connection
+  console.log('[Mongoose] Connected. info:', {
+    user,
+    db: name,
+    host,
+    port,
+    models: mongoose.connection.modelNames(),
+    ver: mongoose.version,
+  })
 }
 
 /**
  * 启动服务
  */
 function startServer() {
+  const version = '1.1.0'
+
+  const app = new koa()
+
+  app.use(helmet())
+
+  app.use(logger())
+
+  app.use(cors({ credentials: true, origin: CORS_ORIGIN, maxAge: 3600 }))
+
+  app.use(
+    bodyParser({
+      enableTypes: ['json'],
+      onerror(err, ctx) {
+        ctx.throw(422)
+      },
+    })
+  )
+
+  app.use(errorHanlder)
+
+  app.use(router.routes())
+  app.use(router.allowedMethods())
+
+  let server: Http2SecureServer | Server
+  const info = {
+    NODE_ENV: process.env.NODE_ENV,
+    tls: true,
+    node_ver: process.version,
+    ver: version,
+  }
+
   return new Promise<void>((resolve, reject) => {
     try {
-      const app = new Koa()
-
-      app.use(Helmet())
-
-      app.use(Logger())
-
-      app.use(Cors({ credentials: true, origin: CORS_ORIGIN, maxAge: A_WEEK / 1000 }))
-
-      app.use(BodyParser({ enableTypes: ['json'] }))
-
-      app.use(ErrorHanlder())
-
-      app.use(router.routes())
-      app.use(router.allowedMethods())
-
-      const serverOption: SecureServerOptions = {
-        key: fs.readFileSync(SERVER_KEY_PATH),
-        cert: fs.readFileSync(SERVER_CRT_PATH),
-        allowHTTP1: true
+      if (process.env.NODE_ENV === 'prod') {
+        server = http2.createSecureServer(
+          {
+            key: fs.readFileSync(SERVER_KEY_PATH),
+            cert: fs.readFileSync(SERVER_CRT_PATH),
+            allowHTTP1: true,
+          },
+          app.callback()
+        )
+      } else {
+        server = http.createServer(app.callback())
+        info.tls = false
       }
 
-      const server = http2.createSecureServer(serverOption, app.callback())
-
-      server.listen(process.env.PORT)
-      console.log(`[config] NODE_ENV: ${process.env.NODE_ENV} PORT: ${process.env.PORT}`)
-      console.log(`[server] server running at https://localhost:${process.env.PORT}`)
+      server.listen(process.env.PORT ?? 3000, () => {
+        const address = server.address()
+        if (address && typeof address !== 'string') {
+          Object.assign(info, address)
+        }
+        console.log('[Server] Launched. info:', info)
+      })
 
       return resolve()
     } catch (err) {
@@ -81,8 +103,7 @@ Promise.all([connectDb(), startServer()]).then(
   () => {
     return process.send?.('ready')
   },
-  (err) => {
-    console.error(err)
+  () => {
     return process.exit(1)
   }
 )

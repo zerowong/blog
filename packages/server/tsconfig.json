@@ -12,5 +12,5 @@
     "removeComments": true,
     "listEmittedFiles": true
   },
-  "include": ["src"]
+  "include": ["src", "ecosystem.config.js"]
 }

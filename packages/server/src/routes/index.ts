@@ -1,12 +1,12 @@
 import Router from '@koa/router'
-import BodyValidate from '../middlewares/body-validate'
+import test from './test'
 import user from './user'
-import articles from './articles'
+import articles from './article'
 import sts from './sts'
 
-const router = new Router({ prefix: process.env.NODE_ENV === 'dev' ? '/dev' : undefined })
+const router = new Router()
 
-router.use(BodyValidate())
+router.use(test)
 
 router.use(user)
 

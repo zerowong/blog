@@ -17,3 +17,4 @@ dist-ssr
 
 /packages/server/assets
 /packages/server/log
+/tests

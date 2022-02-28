@@ -4,7 +4,7 @@ import type { Socket } from 'net'
 import WS from 'ws'
 import { createLogger, getCookieValue, verifyToken } from '../utils'
 import type { Logger } from '../utils'
-import { User } from '../db'
+import { UserModel } from '../db'
 
 interface Payload {
   id: string
@@ -84,7 +84,7 @@ export default function initWebSocketServer(server: Server) {
     ws.on('close', () => {
       clearInterval(intervalId)
 
-      User.findByIdAndUpdate(payload.id, { lastActiveAt: new Date().toISOString() }, (err, doc) => {
+      UserModel.findByIdAndUpdate(payload.id, { lastActiveAt: new Date().toISOString() }, (err, doc) => {
         if (err || !doc) {
           return
         }
