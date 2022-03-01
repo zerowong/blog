@@ -3,59 +3,10 @@ import { ArticleModel } from '../db'
 import { errors } from '../utils'
 import { userTokenAuth, adminAuth, pageAndSort, bodyValidator } from '../middlewares'
 
-const router = new Router()
-
-router.get(
-  '/articles',
-  async (ctx, next) => {
-    const articles = await ArticleModel.find({})
-      .lean()
-      .populate({
-        path: 'user',
-        select: 'name avatar lastActiveAt',
-        options: {
-          lean: true,
-        },
-      })
-    ctx.state.body = articles
-    return next()
-  },
-  pageAndSort
-)
-
-router.get('/article/:id', async (ctx) => {
-  const { id } = ctx.params
-  const article = await ArticleModel.findById(id)
-    .lean()
-    .populate({
-      path: 'user',
-      select: 'name avatar lastActiveAt',
-      options: {
-        lean: true,
-      },
-    })
-    .populate({
-      path: 'comments',
-      populate: {
-        path: 'user',
-        select: 'name avatar lastActiveAt',
-        options: {
-          lean: true,
-        },
-      },
-      options: {
-        lean: true,
-      },
-    })
-  if (!article) {
-    return ctx.throw(404, errors.RESOURCE_NOT_EXISTS)
-  }
-  ctx.body = article
-  ctx.status = 200
-})
+const router = new Router({ prefix: '/article' })
 
 router.post(
-  '/article',
+  '/',
   userTokenAuth,
   adminAuth,
   bodyValidator({
@@ -78,7 +29,7 @@ router.post(
   }
 )
 
-router.delete('/article/:id', userTokenAuth, adminAuth, async (ctx) => {
+router.delete('/:id', userTokenAuth, adminAuth, async (ctx) => {
   const { id } = ctx.params
   const article = await ArticleModel.findById(id)
   if (!article) {
@@ -88,8 +39,32 @@ router.delete('/article/:id', userTokenAuth, adminAuth, async (ctx) => {
   ctx.status = 200
 })
 
+router.get(
+  '/',
+  async (ctx, next) => {
+    const articles = await ArticleModel.find({}, '-__v')
+      .lean()
+      .populate('user', '-pass -__v')
+    ctx.state.body = articles
+    return next()
+  },
+  pageAndSort
+)
+
+router.get('/:id', async (ctx) => {
+  const { id } = ctx.params
+  const article = await ArticleModel.findById(id, '-__v')
+    .lean()
+    .populate('user', '-pass -__v')
+  if (!article) {
+    return ctx.throw(404, errors.RESOURCE_NOT_EXISTS)
+  }
+  ctx.body = article
+  ctx.status = 200
+})
+
 router.patch(
-  '/article/:id',
+  '/:id',
   userTokenAuth,
   adminAuth,
   bodyValidator({

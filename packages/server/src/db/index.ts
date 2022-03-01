@@ -1,11 +1,15 @@
 import { Schema, model } from 'mongoose'
-import type { SchemaDefinition, SchemaDefinitionType } from 'mongoose'
+import type { SchemaDefinition, SchemaDefinitionType, HydratedDocument } from 'mongoose'
 import type { User, Comment, Article, Book, Tweet, Test } from '../typings'
 
 function createSchema<DocType = any>(
   definition: SchemaDefinition<SchemaDefinitionType<DocType>>
 ) {
-  return new Schema<DocType>(definition, { timestamps: true })
+  return new Schema<DocType>(definition, {
+    timestamps: true,
+    toObject: { versionKey: false },
+    toJSON: { versionKey: false },
+  })
 }
 
 const TestSchema = createSchema<Test>({
@@ -29,6 +33,9 @@ const CommentSchema = createSchema<Comment>({
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   content: { type: String, required: true },
   replyTo: { type: Schema.Types.ObjectId, ref: 'User' },
+  isDeleted: { type: Boolean, default: false },
+  articleId: { type: Schema.Types.ObjectId, ref: 'Article' },
+  tweetId: { type: Schema.Types.ObjectId, ref: 'Tweet' },
 })
 
 const ArticleSchema = createSchema<Article>({
@@ -41,6 +48,23 @@ const ArticleSchema = createSchema<Article>({
   views: { type: Number, default: 0 },
 })
 
+ArticleSchema.method<HydratedDocument<Article>>(
+  'removeComment',
+  async function (id: string) {
+    let target = -1
+    for (let i = 0, l = this.comments.length; i < l; i++) {
+      if (this.comments[i].toString() === id) {
+        target = i
+        break
+      }
+    }
+    if (target !== -1) {
+      this.comments.splice(target, 1)
+      await this.save()
+    }
+  }
+)
+
 const BookSchema = createSchema<Book>({
   isbn: { type: String, required: true },
   title: { type: String, required: true },
@@ -51,9 +75,23 @@ const BookSchema = createSchema<Book>({
 })
 
 const TweetSchema = createSchema<Tweet>({
-  user: { type: Schema.Types.ObjectId, ref: 'User' },
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   content: { type: String, required: true },
   comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+})
+
+TweetSchema.method<HydratedDocument<Tweet>>('removeComment', async function (id: string) {
+  let target = -1
+  for (let i = 0, l = this.comments.length; i < l; i++) {
+    if (this.comments[i].toString() === id) {
+      target = i
+      break
+    }
+  }
+  if (target !== -1) {
+    this.comments.splice(target, 1)
+    await this.save()
+  }
 })
 
 export const TestModel = model('Test', TestSchema)

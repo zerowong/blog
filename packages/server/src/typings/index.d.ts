@@ -36,6 +36,9 @@ interface Comment {
   user: Types.ObjectId
   content: string
   replyTo?: Types.ObjectId
+  isDeleted: boolean
+  articleId?: Types.ObjectId
+  tweetId?: Types.ObjectId
 }
 
 interface Article {
@@ -46,6 +49,7 @@ interface Article {
   cover?: string
   tags: string[]
   views: number
+  removeComment(id: string): Promise<void>
 }
 
 interface Book {
@@ -61,6 +65,7 @@ interface Tweet {
   user: Types.ObjectId
   content: string
   comments: Types.ObjectId[]
+  removeComment(id: string): Promise<void>
 }
 
 interface UserTokenPayload {

@@ -115,6 +115,9 @@ export function bodyValidator(validator: Validator) {
   }
 }
 
+/**
+ * @requires ctx.state.body
+ */
 export function pageAndSort(ctx: ParameterizedContext) {
   const { sort, order, page, limit } = ctx.query
   const body = ctx.state.body
