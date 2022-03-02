@@ -11,7 +11,6 @@
       "files": ["./packages/server/**/*.ts"],
       "env": {
         "es2021": true
-        // "node": true
       },
       "parserOptions": {
         "project": "./packages/server/tsconfig.json"
@@ -19,6 +18,35 @@
       "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
       "rules": {
         "@typescript-eslint/no-explicit-any": "off"
+      }
+    },
+    {
+      "files": ["./packages/client/**/*.{ts,tsx}"],
+      "env": {
+        "browser": true,
+        "es2021": true
+      },
+      "parserOptions": {
+        "project": "./packages/client/tsconfig.json"
+      },
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended"
+      ],
+      "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "no-console": "warn",
+        "no-empty": ["error", { "allowEmptyCatch": true }],
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-empty-interface": [
+          "error",
+          {
+            "allowSingleExtends": true
+          }
+        ]
       }
     }
   ]
