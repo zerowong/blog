@@ -66,11 +66,8 @@ ArticleSchema.method<HydratedDocument<Article>>(
 )
 
 const BookSchema = createSchema<Book>({
-  isbn: { type: String, required: true },
   title: { type: String, required: true },
-  abstract: { type: String, required: true },
-  cover: { type: String, required: true },
-  dobanUrl: { type: String, required: true },
+  doubanUrl: { type: String, required: true },
   isReaded: { type: Boolean, default: false },
 })
 

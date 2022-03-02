@@ -53,11 +53,8 @@ interface Article {
 }
 
 interface Book {
-  isbn: string
   title: string
-  abstract: string
-  cover: string
-  dobanUrl: string
+  doubanUrl: string
   isReaded: boolean
 }
 
