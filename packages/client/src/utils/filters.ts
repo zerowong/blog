@@ -1,3 +1,11 @@
+/**
+ * 日期时间格式化
+ */
+export const format = {
+  dateTime,
+  relativeTime,
+}
+
 function isInvalidDate(time: Date) {
   return Number.isNaN(time.getTime())
 }
@@ -8,7 +16,7 @@ const timeDtf = new Intl.DateTimeFormat('zh', { timeStyle: 'short', hourCycle: '
 /**
  * 格式化为绝对时间
  */
-export function date(value: string) {
+function dateTime(value: string) {
   const time = new Date(value)
   if (isInvalidDate(time)) {
     return value
@@ -30,7 +38,7 @@ const units: [Intl.RelativeTimeFormatUnit, number][] = [
 /**
  * 格式化为相对时间
  */
-export function dateFromNow(value: string) {
+function relativeTime(value: string) {
   const time = new Date(value)
   if (isInvalidDate(time)) {
     return value

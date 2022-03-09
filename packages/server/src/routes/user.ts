@@ -2,30 +2,28 @@ import Router from '@koa/router'
 import { UserModel } from '../db'
 import type { User, UserTokenPayload } from '../typings'
 import { signToken, hash, verify, USER_TOKEN_OPTION, errors } from '../utils'
-import { captcha, userTokenAuth, bodyValidator } from '../middlewares'
+import { userTokenAuth, bodyValidator } from '../middlewares'
 
 const router = new Router({ prefix: '/user' })
 
-router.use(
-  ['/register', '/login'],
-  captcha,
-  bodyValidator({ name: 'String', pass: 'String' })
+router.post(
+  '/register',
+  bodyValidator({ name: 'String', pass: 'String', avatar: 'String' }),
+  async (ctx) => {
+    const { name, pass, avatar } = <User>ctx.request.body
+    const user = await UserModel.findOne({ name }).lean()
+    if (user) {
+      return ctx.throw(403, errors.USER_EXISTS)
+    }
+    const hashedPass = await hash(pass)
+    const newUser = await UserModel.create({ name, pass: hashedPass, avatar })
+    const token = await signToken({ id: newUser._id, isAdmin: newUser.isAdmin })
+    ctx.cookies.set('user_token', token, USER_TOKEN_OPTION)
+    ctx.status = 200
+  }
 )
 
-router.post('/register', async (ctx) => {
-  const { name, pass } = <User>ctx.request.body
-  const user = await UserModel.findOne({ name }).lean()
-  if (user) {
-    return ctx.throw(403, errors.USER_EXISTS)
-  }
-  const hashedPass = await hash(pass)
-  const newUser = await UserModel.create({ name, pass: hashedPass })
-  const token = await signToken({ id: newUser._id, isAdmin: newUser.isAdmin })
-  ctx.cookies.set('user_token', token, USER_TOKEN_OPTION)
-  ctx.status = 200
-})
-
-router.post('/login', async (ctx) => {
+router.post('/login', bodyValidator({ name: 'String', pass: 'String' }), async (ctx) => {
   const { name, pass } = <User>ctx.request.body
   const user = await UserModel.findOne({ name }).lean()
   if (!user) {
@@ -48,6 +46,9 @@ router.get('/logout', (ctx) => {
 router.get('/auth', userTokenAuth, async (ctx) => {
   const { id, isAdmin } = <UserTokenPayload>ctx.state.user
   const user = await UserModel.findById(id).lean().select('-pass')
+  if (!user) {
+    return ctx.throw(404, errors.USER_NOT_EXISTS)
+  }
   const token = await signToken({ id, isAdmin })
   ctx.cookies.set('user_token', token, USER_TOKEN_OPTION)
   ctx.status = 200

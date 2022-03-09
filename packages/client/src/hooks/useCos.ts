@@ -1,10 +1,12 @@
-import { useRef } from 'react'
+import { useMemo } from 'react'
 import COS from 'cos-js-sdk-v5'
-import Service from '../utils/services'
+import { TencentService } from '../services'
 
 const cos = new COS({
+  Domain: 'cdn.apasser.xyz',
+  Protocol: 'https:',
   getAuthorization(options, callback) {
-    Service.getSTS().then(
+    TencentService.getSts().then(
       (tempCred) => {
         callback({
           TmpSecretId: tempCred.credentials.tmpSecretId,
@@ -24,16 +26,18 @@ const cos = new COS({
  * 腾讯云cos存储
  */
 export function useCos() {
-  const cosRef = useRef({
-    putObject(key: string, body: File) {
-      return cos.putObject({
-        Bucket: 'blog-1302895217',
-        Region: 'ap-nanjing',
-        Key: key,
-        Body: body,
-      })
-    },
-  })
+  const cosWrapper = useMemo(() => {
+    return {
+      putObject(key: string, body: File) {
+        return cos.putObject({
+          Bucket: 'blog-1302895217',
+          Region: 'ap-nanjing',
+          Key: key,
+          Body: body,
+        })
+      },
+    }
+  }, [])
 
-  return cosRef.current
+  return cosWrapper
 }

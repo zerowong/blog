@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 
-interface MyRequestConfig {
+interface Config {
   baseURL: string
 }
 
@@ -16,12 +16,12 @@ type HTTPMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 class MyRequest {
   private headers: Headers
   private requestInit: MyRequestInit
-  public config: MyRequestConfig
+  public config: Config
 
-  constructor(config: MyRequestConfig) {
+  constructor(config: Config) {
     this.config = config
     this.headers = new Headers({
-      Accept: 'application/json, text/plain, */*',
+      'Accept': 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
     })
     this.requestInit = {
@@ -34,12 +34,12 @@ class MyRequest {
     }
   }
 
-  private responseRejected() {
-    toast.error('网络错误/服务器挂了')
-  }
-
-  private responseResolvedButNotOK(response: Response) {
-    response.text().then((value) => toast.error(value))
+  private errorHandler(reason: unknown) {
+    if (reason instanceof Response) {
+      reason.text().then((value) => toast.error(value))
+    } else if (reason instanceof TypeError) {
+      toast.error('网络错误/服务挂了')
+    }
   }
 
   async fetch<T = void>(
@@ -56,20 +56,36 @@ class MyRequest {
         ...this.requestInit,
         ...config,
       })
-      if (response.ok) {
-        return response.json()
+      if (!response.ok) {
+        throw response
       }
-      throw response
+      return response.json()
     } catch (reason) {
       if (!config?.noCommonErrorHandle) {
-        if (reason instanceof Response) {
-          this.responseResolvedButNotOK(reason)
-        } else if (reason instanceof TypeError) {
-          this.responseRejected()
-        }
+        this.errorHandler(reason)
       }
       return Promise.reject(reason)
     }
+  }
+
+  get<T = void>(url: string, config?: MyRequestInit) {
+    return this.fetch<T>(url, 'GET', undefined, config)
+  }
+
+  post<T = void>(url: string, data: unknown, config?: MyRequestInit) {
+    return this.fetch<T>(url, 'POST', data, config)
+  }
+
+  delete<T = void>(url: string, config?: MyRequestInit) {
+    return this.fetch<T>(url, 'DELETE', undefined, config)
+  }
+
+  patch<T = void>(url: string, data: unknown, config?: MyRequestInit) {
+    return this.fetch<T>(url, 'PATCH', data, config)
+  }
+
+  put<T = void>(url: string, data: unknown, config?: MyRequestInit) {
+    return this.fetch<T>(url, 'PUT', data, config)
   }
 }
 

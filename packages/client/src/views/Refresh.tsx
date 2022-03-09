@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import classNames from 'classnames'
-import { Icon } from '../components'
+import { IconFont } from '../components'
 
 interface RefreshProps {
   onClick: () => Promise<unknown>
@@ -15,7 +15,7 @@ export function Refresh(props: RefreshProps) {
   }
 
   return (
-    <Icon
+    <IconFont
       name="refresh"
       className={classNames('cursor-pointer', 'text-3xl', {
         'animate-spin': loading,

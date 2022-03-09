@@ -89,7 +89,7 @@ export function sortQuery(
   key?: string | string[],
   order?: string | string[]
 ) {
-  if (typeof key !== 'string' || !hasProp(arr[0], key)) {
+  if (!arr.length || typeof key !== 'string' || !hasProp(arr[0], key)) {
     return
   }
   if (order !== 'asc') {
@@ -119,7 +119,7 @@ export function pageQuery(
   page?: string | string[],
   limit?: string | string[]
 ) {
-  if (typeof page !== 'string') {
+  if (!arr.length || typeof page !== 'string') {
     return arr
   }
   const _page = Number.parseInt(page, 10)

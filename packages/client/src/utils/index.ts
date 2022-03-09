@@ -1,3 +1,5 @@
+export * from './filters'
+
 export function getImageDataURL(img: File) {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader()
@@ -19,4 +21,19 @@ export function getImageDataURL(img: File) {
 export function removeExt(fileName: string) {
   const dotIndex = fileName.lastIndexOf('.')
   return fileName.slice(0, dotIndex)
+}
+
+/**
+ * 截取文件扩展名(含`.`)
+ */
+export function getExt(fileName: string) {
+  const dotIndex = fileName.lastIndexOf('.')
+  if (dotIndex === -1) {
+    return null
+  }
+  return fileName.slice(dotIndex)
+}
+
+export function hasProp(obj: unknown, key: string) {
+  return Object.prototype.hasOwnProperty.call(obj, key)
 }

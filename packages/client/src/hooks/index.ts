@@ -1,3 +1,6 @@
 export * from './useCaptcha'
-export * from './useMatchQuery'
+export * from './useMatchMedia'
 export * from './useCos'
+export * from './useGlobalLoading'
+export * from './useGlobalEffect'
+export * from './useForceUpdate'

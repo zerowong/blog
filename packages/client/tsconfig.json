@@ -11,7 +11,7 @@
     "moduleResolution": "Node",
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react-jsx"
   },
   "include": ["src"],
   "exclude": ["tailwind.config.js", "postcss.config.js", "vite.config.ts"]

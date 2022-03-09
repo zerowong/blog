@@ -23,7 +23,7 @@ export const ONE_DAY = 86400000
 
 export const USER_TOKEN_OPTION = {
   maxAge: ONE_DAY * 30,
-  sameSite: 'none',
+  sameSite: process.env.NODE_ENV === 'prod' ? 'none' : undefined,
 } as const
 
 export const CORS_ORIGIN =

@@ -1,59 +1,44 @@
-interface BaseSchema {
+interface Base {
   _id: string
-}
-
-export interface User extends BaseSchema {
-  name: string
-  avatar: string
-  mail: string
-  pass: string
-  createdAt: string
-  lastActiveAt: string
-  role: 'admin' | 'normal'
-}
-
-export interface Comment extends BaseSchema {
-  user: string
-  content: string
-  likes: string[]
-  replies: string[]
-  createdAt: string
-}
-
-export interface Reply extends BaseSchema {
-  user: string
-  content: string
-  to: string
-  createdAt: string
-}
-
-export interface Book extends BaseSchema {
-  isbn: string
-  title: string
-  abstract: string
-  coverUrl: string
-  url: string
-  isReaded: boolean
-}
-
-export interface Article extends BaseSchema {
-  title: string
-  content: string
-  comments: string[]
-  coverUrl: string
-  path: string
   createdAt: string
   updatedAt: string
 }
 
-export interface Tweet extends BaseSchema {
-  content: string
-  comments: string[]
-  createdAt: string
+export interface User extends Base {
+  name: string
+  pass: string
+  avatar?: string
+  lastActiveAt: Date
+  isAdmin: boolean
 }
 
-export interface Stats extends BaseSchema {
-  device: string
-  browser: string
-  activeTime: number
+export interface Comment extends Base {
+  user: User
+  content: string
+  replyTo?: User
+  isDeleted: boolean
+  articleId?: string
+  tweetId?: string
+}
+
+export interface Article extends Base {
+  user: User
+  title: string
+  content: string
+  comments: string[]
+  cover?: string
+  tags: string[]
+  views: number
+}
+
+export interface Book extends Base {
+  title: string
+  doubanUrl: string
+  isReaded: boolean
+}
+
+export interface Tweet extends Base {
+  user: User
+  content: string
+  comments: string[]
 }

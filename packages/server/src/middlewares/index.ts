@@ -1,10 +1,10 @@
 import fs from 'fs'
 import type { ParameterizedContext, Next } from 'koa'
 import koajwt from 'koa-jwt'
-import * as TencentCaptcha from 'tencentcloud-sdk-nodejs/tencentcloud/services/captcha'
+// import * as TencentCaptcha from 'tencentcloud-sdk-nodejs/tencentcloud/services/captcha'
 import {
   PUBLIC_KEY_PATH,
-  serverConfig,
+  // serverConfig,
   type,
   errors,
   pageQuery,
@@ -24,29 +24,29 @@ export async function adminAuth(ctx: ParameterizedContext, next: Next) {
   return next()
 }
 
-const client = new TencentCaptcha.captcha.v20190722.Client({
-  credential: serverConfig.credential,
-  region: '',
-  profile: {},
-})
+// const client = new TencentCaptcha.captcha.v20190722.Client({
+//   credential: serverConfig.credential,
+//   region: '',
+//   profile: {},
+// })
 
-export async function captcha(ctx: ParameterizedContext, next: Next) {
-  if (process.env.NODE_ENV === 'test') {
-    return next()
-  }
-  const { Ticket, Randstr } = ctx.request.body
-  const res = await client.DescribeCaptchaResult({
-    CaptchaType: 9,
-    UserIp: ctx.ip,
-    Ticket,
-    Randstr,
-    ...serverConfig.captcha,
-  })
-  if (res.CaptchaCode !== 1) {
-    ctx.throw(404, errors.CAPTCHA_INVALID)
-  }
-  return next()
-}
+// export async function captcha(ctx: ParameterizedContext, next: Next) {
+//   if (process.env.NODE_ENV === 'test') {
+//     return next()
+//   }
+//   const { Ticket, Randstr } = ctx.request.body
+//   const res = await client.DescribeCaptchaResult({
+//     CaptchaType: 9,
+//     UserIp: ctx.ip,
+//     Ticket,
+//     Randstr,
+//     ...serverConfig.captcha,
+//   })
+//   if (res.CaptchaCode !== 1) {
+//     ctx.throw(404, errors.CAPTCHA_INVALID)
+//   }
+//   return next()
+// }
 
 // https://github.com/jshttp/http-errors
 interface HttpError {
@@ -61,6 +61,9 @@ interface HttpError {
 export async function errorHanlder(ctx: ParameterizedContext, next: Next) {
   try {
     await next()
+    if (ctx.status === 200 && ctx.body === undefined) {
+      ctx.body = { success: true }
+    }
   } catch (err) {
     const { expose, statusCode, status } = <HttpError>err
     ctx.status = statusCode ?? status ?? 500

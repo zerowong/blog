@@ -1,157 +1,148 @@
-import React, { useEffect } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
-import classNames from 'classnames'
-import { Disclosure, Transition } from '@headlessui/react'
-import { Icon } from '../components'
-import { useMatchQuery } from '../hooks'
-import UserProfile from './UserPorfile/UserProfile'
-import { Passport } from './passport'
-import { useStore } from '../context'
-
-interface LocationState {
-  name: string
-}
-
-interface Navigation {
-  to: string
-  name: string
-  key: 'home' | 'articles' | 'comments'
-}
-
-const navigation: Navigation[] = [
-  { to: '/', name: '首页', key: 'home' },
-  { to: '/articles', name: '文章', key: 'articles' },
-  { to: '/comments', name: '留言', key: 'comments' },
-]
-
-const iconClassMap = {
-  'home': 'text-teal-500',
-  'articles': 'text-green-500',
-  'comments': 'text-blue-500',
-}
-
-const navLinkHoverClassMap = {
-  'home': 'hover:bg-teal-100 hover:text-teal-500',
-  'articles': 'hover:bg-green-100 hover:text-green-500',
-  'comments': 'hover:bg-blue-100 hover:text-blue-500',
-}
-
-const navLinkActiveClassMap = {
-  'home': 'bg-teal-100 text-teal-500',
-  'articles': 'bg-green-100 text-green-500',
-  'comments': 'bg-blue-100 text-blue-500',
-}
+import { useState, useMemo } from 'react'
+import { useLocation, useHistory } from 'react-router-dom'
+import { useGlobalEffect } from '../hooks'
+import { Avatar, Drawer, IconFont } from '../components'
+import { Button } from '@waterui/react'
+import useStore from '../store'
+import { Pages, shouldShowLeftArrow } from '../utils/config'
 
 /**
- * 顶部导航栏
+ * 顶部导航栏(移动端)
  */
 export function NavBar() {
-  const location = useLocation<LocationState | undefined>()
-  const mediumScreen = useMatchQuery('screen and (min-width: 768px)')
-  const store = useStore()
+  const location = useLocation()
+  const history = useHistory()
 
-  useEffect(() => {
-    if (location.state) {
-      document.title = `${location.state.name} - ApassEr`
+  useGlobalEffect()
+
+  const [drawerVisible, setDrawerVisible] = useState(false)
+
+  const user = useStore((state) => state.user)
+  const logout = useStore((state) => state.logout)
+  const navTitle = useStore((s) => s.navTitle)
+
+  const [logoutLoading, setLogoutLoading] = useState(false)
+
+  const showLeftArrow = useMemo(
+    () => shouldShowLeftArrow(location.pathname),
+    [location.pathname]
+  )
+
+  const toUserProfile = () => {
+    if (user) {
+      setDrawerVisible(false)
+      return history.push(`${Pages.user}/${user._id}`)
     }
-  }, [location])
+  }
+
+  const toPage = (page: string) => {
+    setDrawerVisible(false)
+    return history.push(page)
+  }
 
   return (
-    <Disclosure>
-      {({ open }) => (
-        <nav className="px-4 md:px-8 shadow">
-          <div className="h-16 flex items-center justify-between md:justify-around">
-            <div className="flex items-center">
-              <a
-                href="/"
-                className="text-2xl font-bold flex-shrink-0 text-sky-500"
-              >
-                ApassEr
-              </a>
+    <div className="fixed top-0 inset-x-0 h-12 px-5 flex items-center justify-between backdrop-blur-md bg-white/[0.85] z-[var(--blog-nav-zindex)]">
+      <span className="inline-flex items-center flex-grow">
+        {showLeftArrow ? (
+          <IconFont
+            name="arrow-left-fill"
+            size="large"
+            onClick={() => history.goBack()}
+            className="mr-5"
+          />
+        ) : (
+          <Avatar
+            src={user?.avatar}
+            onClick={() => setDrawerVisible(true)}
+            containerClassName="mr-5"
+            feedback={
+              <IconFont
+                name="user"
+                className="mr-5"
+                onClick={() => setDrawerVisible(true)}
+              />
+            }
+          />
+        )}
+        <span
+          className="font-bold text-lg truncate w-40 flex-grow"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
+          {navTitle}
+        </span>
+      </span>
+      <div className="rounded-full">
+        {/* @todo 主题 */}
+        {/* <IconFont name="like-fill" /> */}
+      </div>
+      <Drawer
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        title="账号信息"
+        width="65vw"
+      >
+        {user ? (
+          <div className="divide-y">
+            <div className="p-5 flex items-center gap-x-5" onClick={toUserProfile}>
+              <Avatar src={user.avatar} size={50} />
+              <span className="font-bold">{user.name}</span>
             </div>
-            {mediumScreen && (
-              <>
-                <div className="flex items-baseline space-x-3">
-                  {navigation.map((item) => (
-                    <NavLink
-                      exact
-                      to={{ pathname: item.to, state: { name: item.name } }}
-                      key={item.to}
-                      className={classNames(
-                        'p-3 text-2xl rounded-xl transition-colors inline-flex items-center',
-                        navLinkHoverClassMap[item.key]
-                      )}
-                      activeClassName={navLinkActiveClassMap[item.key]}
-                    >
-                      <Icon
-                        name={item.key}
-                        className={classNames(
-                          'text-2xl mr-1',
-                          iconClassMap[item.key]
-                        )}
-                      />
-                      {item.name}
-                    </NavLink>
-                  ))}
-                </div>
-                <div className="flex items-center space-x-8">
-                  <button className="text-gray-500 hover:text-gray-600">
-                    <Icon name="notify" className="text-2xl" />
-                  </button>
-                  {store.state.user ? (
-                    <UserProfile user={store.state.user} />
-                  ) : (
-                    <Passport />
-                  )}
-                </div>
-              </>
-            )}
-            {!mediumScreen && (
-              <Disclosure.Button>
-                <Icon name={open ? 'close' : 'menu'} className="text-4xl" />
-              </Disclosure.Button>
-            )}
+            <div className="p-5">
+              <Button
+                block
+                onClick={toUserProfile}
+                icon={<IconFont name="user" size={20} />}
+                iconWrapperClassName="mr-1"
+              >
+                个人资料
+              </Button>
+              <Button
+                block
+                color="red"
+                loading={logoutLoading}
+                onClick={async () => {
+                  setLogoutLoading(true)
+                  try {
+                    await logout()
+                    setDrawerVisible(false)
+                  } finally {
+                    setLogoutLoading(false)
+                  }
+                }}
+                icon={<IconFont name="signout" size={20} />}
+                iconWrapperClassName="mr-1"
+              >
+                登出
+              </Button>
+            </div>
           </div>
-          <Transition
-            enter="transition duration-300 ease-out"
-            enterFrom="transform-gpu -translate-y-1/2 opacity-0"
-            enterTo="transform-gpu translate-y-0 opacity-100"
-            leave="transition duration-300 ease-in"
-            leaveFrom="transform-gpu translate-y-0 opacity-100"
-            leaveTo="transform-gpu translate-y-4 opacity-0"
-          >
-            <Disclosure.Panel className="md:hidden">
-              <div className="pb-2">
-                {navigation.map((item) => (
-                  <Disclosure.Button
-                    as={NavLink}
-                    exact
-                    to={{ pathname: item.to, state: { name: item.name } }}
-                    key={item.to}
-                    className={classNames(
-                      'p-3 text-xl rounded-xl transition-colors flex justify-center items-center',
-                      navLinkHoverClassMap[item.key]
-                    )}
-                    activeClassName={navLinkActiveClassMap[item.key]}
-                  >
-                    <Icon
-                      name={item.key}
-                      className={classNames(
-                        'text-2xl mr-1',
-                        iconClassMap[item.key]
-                      )}
-                    />
-                    {item.name}
-                  </Disclosure.Button>
-                ))}
-              </div>
-              <div className="border-t border-gray-300 py-3">
-                {/* TODO: 用户头像、操作，通知 */}
-              </div>
-            </Disclosure.Panel>
-          </Transition>
-        </nav>
-      )}
-    </Disclosure>
+        ) : (
+          <div className="p-5">
+            <Button
+              block
+              onClick={() => toPage(Pages.login)}
+              icon={<IconFont name="signin" size={20} />}
+              iconWrapperClassName="mr-1"
+            >
+              登录
+            </Button>
+            <Button
+              block
+              color="green"
+              onClick={() => toPage(Pages.register)}
+              icon={<IconFont name="register" size={20} />}
+              iconWrapperClassName="mr-1"
+            >
+              注册
+            </Button>
+          </div>
+        )}
+        <div className="px-5 border-t">
+          <Button block color="teal" onClick={() => toPage(Pages.about)}>
+            关于
+          </Button>
+        </div>
+      </Drawer>
+    </div>
   )
 }

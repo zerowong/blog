@@ -1,11 +1,11 @@
 import Router from '@koa/router'
 import STS from 'qcloud-cos-sts'
-import { userTokenAuth, adminAuth } from '../middlewares'
+import { userTokenAuth } from '../middlewares'
 import { serverConfig, errors } from '../utils'
 
 const router = new Router()
 
-router.use(['/sts'], userTokenAuth, adminAuth)
+router.use(['/sts'], userTokenAuth)
 
 /**
  * 临时密钥服务

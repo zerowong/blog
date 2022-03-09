@@ -36,8 +36,6 @@ async function connectDb() {
  * 启动服务
  */
 function startServer() {
-  const version = '1.1.0'
-
   const app = new koa()
 
   app.use(helmet())
@@ -65,7 +63,6 @@ function startServer() {
     NODE_ENV: process.env.NODE_ENV,
     tls: true,
     node_ver: process.version,
-    ver: version,
   }
 
   return new Promise<void>((resolve, reject) => {

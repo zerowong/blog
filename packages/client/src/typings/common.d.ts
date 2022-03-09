@@ -1,7 +1,6 @@
-export interface CommonResponse {
-  message: string
-}
-
+/**
+ * 腾讯云验证码
+ */
 export interface CaptchaParams {
   Ticket: string
   Randstr: string
@@ -18,11 +17,4 @@ export interface TempCredential {
     tmpSecretKey: string
     sessionToken: string
   }
-}
-
-export interface RequestQuery {
-  sort?: string
-  order?: 'asc' | 'desc'
-  page?: string
-  limit?: string
 }

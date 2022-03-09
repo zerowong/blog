@@ -1,6 +1,7 @@
-import React from 'react'
-import ReactDom from 'react-dom'
-import './index.css'
+import { render } from 'react-dom'
 import App from './App'
+import './index.css'
+import '@waterui/react/dist/waterui.css'
+import 'react-toastify/dist/ReactToastify.css'
 
-ReactDom.render(<App />, document.getElementById('app'))
+render(<App />, document.getElementById('app'))

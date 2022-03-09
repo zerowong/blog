@@ -53,9 +53,7 @@ router.get(
 
 router.get('/:id', async (ctx) => {
   const { id } = ctx.params
-  const article = await ArticleModel.findById(id, '-__v')
-    .lean()
-    .populate('user', '-pass -__v')
+  const article = await ArticleModel.findById(id, '-__v').lean()
   if (!article) {
     return ctx.throw(404, errors.RESOURCE_NOT_EXISTS)
   }
