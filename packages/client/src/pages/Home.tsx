@@ -1,14 +1,15 @@
-import { PageContainer } from '../views'
 import { useState, useEffect } from 'react'
-import type { FormEvent } from 'react'
 import { ArticleService, TweetService, CommentService } from '../services'
 import type { Article, Tweet, Comment } from '../typings'
 import { useForceUpdate } from '../hooks'
-import { Tabs, Avatar, IconFont, Drawer } from '../components'
+import { Tabs, Avatar, IconFont, Drawer, AdminRender, MobileRender } from '../components'
 import { format, hasProp } from '../utils'
 import { useHistory } from 'react-router-dom'
 import { Pages } from '../utils/config'
-import { CommentsDrawer, AdminAccess } from '../views'
+import { CommentsDrawer } from '../views'
+import useStore from '../store'
+import { Button, Form, TextArea } from '@waterui/react'
+import type { FormValues } from '@waterui/react'
 
 type Timeline = Article | Tweet
 type Order = 'desc' | 'asc'
@@ -58,10 +59,8 @@ function deleteTweet(id: string, isArticle: boolean) {
   return TweetService.delete(id)
 }
 
-/**
- * 主页
- */
 export default function Home() {
+  const isDesktop = useStore((s) => s.isDesktop)
   const history = useHistory()
 
   const [timelines, setTimelines] = useState<Timeline[]>([])
@@ -100,25 +99,30 @@ export default function Home() {
 
   const [newTweetDrawerVisible, setNewTweetDrawerVisible] = useState(false)
 
-  const addTweet = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const values: Record<string, string> = {}
-    const formData = new FormData(e.currentTarget)
-    for (const [name, value] of formData) {
-      if (typeof value === 'string') {
-        values[name] = value
-      }
+  const addTweet = async (values: FormValues) => {
+    if (!values.content) {
+      return Promise.reject('empty content')
     }
-    try {
-      // @ts-ignore
-      await TweetService.add(values)
-      forceUpdate()
-    } catch {}
+    // @ts-ignore
+    await TweetService.add(values)
+    forceUpdate()
   }
 
   return (
-    <PageContainer>
-      <div className="flex justify-end items-center border-b-8 border-t px-5 py-2">
+    <div>
+      <MobileRender reverse>
+        <AdminRender>
+          <Form onFinish={addTweet} className="p-5">
+            <TextArea name="content" placeholder="推文" className="resize-none" />
+            <div className="flex justify-end">
+              <Button type="submit" className="float-right">
+                发推
+              </Button>
+            </div>
+          </Form>
+        </AdminRender>
+      </MobileRender>
+      <div className="flex justify-end items-center border-b-8 lg:border-b border-t px-5 py-2">
         <span>
           <Tabs
             onChange={(idx) => {
@@ -131,7 +135,7 @@ export default function Home() {
           </Tabs>
         </span>
       </div>
-      <div className="divide-y-8">
+      <div className="divide-y-8 lg:divide-y">
         {timelines.map((item) => {
           let content = <div></div>
           if (isArticle(item)) {
@@ -141,14 +145,13 @@ export default function Home() {
                 onClick={() => history.push(`${Pages.article}/${item._id}`)}
               >
                 {item.cover && (
-                  <img
-                    src={item.cover}
-                    className="object-cover object-center h-40 w-full rounded-t-xl"
-                  />
+                  <img src={item.cover} className="aspect-[2/1] w-full rounded-t-xl" />
                 )}
-                <div className="p-2">
-                  <div className="text-xl font-bold">{item.title}</div>
-                  <div className="line-clamp-3 text-slate-500">{item.content}</div>
+                <div className="p-2 select-none space-y-1">
+                  <div className="text-xl lg:text-2xl font-bold">{item.title}</div>
+                  <div className="line-clamp-3 lg:line-clamp-6 text-slate-500">
+                    {item.content}
+                  </div>
                 </div>
               </div>
             )
@@ -157,6 +160,9 @@ export default function Home() {
             content = (
               <div
                 onClick={() => {
+                  if (isDesktop) {
+                    return history.push(`${Pages.tweet}/${item._id}`)
+                  }
                   setTweetId(item._id)
                   setShowComments(true)
                 }}
@@ -172,7 +178,10 @@ export default function Home() {
             )
           }
           return (
-            <div key={item._id} className="flex gap-x-2 px-5 py-2">
+            <div
+              key={item._id}
+              className="flex gap-x-2 px-5 py-2 lg:transition-colors lg:hover:bg-gray-100 lg:cursor-pointer"
+            >
               <div className="pt-1">
                 <Avatar
                   src={item.user.avatar}
@@ -188,7 +197,7 @@ export default function Home() {
                       ・{format.relativeTime(item.createdAt)}
                     </span>
                   </div>
-                  <AdminAccess>
+                  <AdminRender>
                     <div className="dropdown dropdown-end">
                       <label tabIndex={0}>
                         <IconFont name="more" />
@@ -206,7 +215,7 @@ export default function Home() {
                         </li>
                       </ul>
                     </div>
-                  </AdminAccess>
+                  </AdminRender>
                 </div>
                 {content}
               </div>
@@ -214,42 +223,47 @@ export default function Home() {
           )
         })}
       </div>
-      <CommentsDrawer
-        visible={showComments}
-        onClose={() => setShowComments(false)}
-        comments={comments}
-        onTabChange={(key) => setCommentsOrder(key)}
-        targetId={tweetId}
-        to="tweet"
-        loading={commentsLoading}
-        onUpdate={() => {
-          forceUpdate()
-          forceUpdate2()
-        }}
-      />
-      <AdminAccess>
-        <button
-          className="btn btn-circle fixed right-5 bottom-20"
-          onClick={() => setNewTweetDrawerVisible(true)}
-        >
-          <IconFont name="modify" />
-        </button>
-        <Drawer
-          visible={newTweetDrawerVisible}
-          onClose={() => setNewTweetDrawerVisible(false)}
-          placement="bottom"
-          title="发推"
-        >
-          <form onSubmit={addTweet} className="px-5">
-            <div>
-              <textarea name="content" className="border w-full" placeholder="推文" />
-            </div>
-            <button type="submit" className="border p-2 shadow w-full">
-              提交
-            </button>
-          </form>
-        </Drawer>
-      </AdminAccess>
-    </PageContainer>
+      <MobileRender>
+        <CommentsDrawer
+          visible={showComments}
+          onClose={() => setShowComments(false)}
+          comments={comments}
+          onTabChange={(key) => setCommentsOrder(key)}
+          targetId={tweetId}
+          to="tweet"
+          onUpdate={() => {
+            forceUpdate()
+            forceUpdate2()
+          }}
+        />
+        <AdminRender>
+          <button
+            className="btn btn-circle fixed right-5 bottom-20"
+            onClick={() => setNewTweetDrawerVisible(true)}
+          >
+            <IconFont name="modify" />
+          </button>
+          <Drawer
+            visible={newTweetDrawerVisible}
+            onClose={() => setNewTweetDrawerVisible(false)}
+            placement="bottom"
+            title="发推"
+          >
+            <Form
+              onFinish={async (values) => {
+                await addTweet(values)
+                return setNewTweetDrawerVisible(false)
+              }}
+              className="px-5 pt-1"
+            >
+              <TextArea name="content" placeholder="推文" className="resize-none" />
+              <Button type="submit" block>
+                发推
+              </Button>
+            </Form>
+          </Drawer>
+        </AdminRender>
+      </MobileRender>
+    </div>
   )
 }

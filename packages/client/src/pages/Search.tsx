@@ -1,6 +1,3 @@
-/**
- * 留言页
- */
 export default function Search() {
-  return <main>Comments</main>
+  return <div className="h-full">...</div>
 }

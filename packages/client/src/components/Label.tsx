@@ -11,7 +11,6 @@ export function Label(props: PropsWithChildren<LabelProps>) {
 
   return (
     <label
-      htmlFor="name"
       className={classNames('mb-1 text-gray-600', { 'block': block }, className)}
       {...rest}
     >

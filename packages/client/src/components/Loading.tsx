@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react'
-import { IconFont } from '../components/IconFont'
+import { IconFont } from './IconFont'
 import classNames from 'classnames'
 
 interface LoadingProps extends ComponentProps<'div'> {

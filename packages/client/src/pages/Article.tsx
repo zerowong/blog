@@ -2,10 +2,10 @@ import { useState, useEffect, useMemo } from 'react'
 import { useParams, Redirect } from 'react-router-dom'
 import { ArticleService, CommentService } from '../services'
 import type { Article, Comment } from '../typings'
-import { IconFont } from '../components'
+import { IconFont, MobileRender, Dialog } from '../components'
 import { format } from '../utils'
 import useStore from '../store'
-import { CommentsDrawer } from '../views'
+import { CommentsDrawer, Comments } from '../views'
 import { useForceUpdate } from '../hooks'
 import classNames from 'classnames'
 import { marked } from 'marked'
@@ -45,7 +45,7 @@ export default function Aritcle() {
   }, [params, setLoading, setNavTitle])
 
   const [comments, setComments] = useState<Comment[]>([])
-  const [showComments, setShowComments] = useState(false)
+  const [commentsVisible, setCommentsVisible] = useState(false)
   const [order, setOrder] = useState<'desc' | 'asc'>('desc')
   /**
    * @todo 骨架屏
@@ -77,40 +77,76 @@ export default function Aritcle() {
   }
 
   return (
-    <div className="pb-1 pt-[var(--blog-nav-height)]">
+    <div className="py-1">
       <div
         hidden={loading}
-        className="bg-fixed bg-cover bg-center h-full overflow-y-scroll"
+        className="bg-fixed overflow-hidden bg-contain bg-center lg:bg-cover lg:bg-left"
         style={{
           backgroundImage: article.cover && `url(${article.cover})`,
         }}
       >
-        <div className={classNames('bg-white px-6', { 'mt-52': article.cover })}>
-          <header className="font-bold text-3xl text-center">{article.title}</header>
+        <div
+          className={classNames('bg-white px-6 pb-6 space-y-3', {
+            'mt-[200px] lg:mt-[30vh]': article.cover,
+          })}
+        >
+          <header className="font-bold text-3xl lg:text-5xl text-center">
+            {article.title}
+          </header>
           <section className="mt-1 text-slate-500 text-center">
             最后编辑于 {format.dateTime(article.updatedAt)}
           </section>
+          {/* @todo 代码语法高亮 */}
           <main
-            className="text-lg prose overflow-x-hidden"
+            className="prose lg:prose-lg overflow-x-clip break-all"
             dangerouslySetInnerHTML={{ __html }}
           />
         </div>
-        <button
-          className="btn btn-circle fixed right-5 bottom-10 shadow"
-          onClick={() => setShowComments(true)}
-        >
-          <IconFont name="replies" />
-        </button>
-        <CommentsDrawer
-          visible={showComments}
-          onClose={() => setShowComments(false)}
-          comments={comments}
-          onTabChange={(key) => setOrder(key)}
-          loading={commentsLoading}
-          targetId={article._id}
-          onUpdate={forceUpdate}
-          to="article"
-        />
+        <MobileRender reverse>
+          <div className="fixed bottom-0 bg-white w-[698px] px-5 h-10 flex items-center justify-end border-t">
+            <div className="p-1 rounded-md hover:bg-gray-100 cursor-pointer text-slate-500 space-x-2 select-none">
+              <span>
+                <IconFont name="replies" />
+                <span className="align-bottom ml-1">{article.comments.length}</span>
+              </span>
+              <span className="align-bottom" onClick={() => setCommentsVisible(true)}>
+                添加评论
+              </span>
+            </div>
+          </div>
+          <Dialog
+            visible={commentsVisible}
+            onClose={() => setCommentsVisible(false)}
+            title="全部评论"
+            width="600px"
+            height="80vh"
+          >
+            <Comments
+              comments={comments}
+              onTabChange={(key) => setOrder(key)}
+              onUpdate={() => forceUpdate()}
+              targetId={params.id}
+              to="article"
+            />
+          </Dialog>
+        </MobileRender>
+        <MobileRender>
+          <button
+            className="btn btn-circle fixed right-5 bottom-10 shadow"
+            onClick={() => setCommentsVisible(true)}
+          >
+            <IconFont name="replies" />
+          </button>
+          <CommentsDrawer
+            visible={commentsVisible}
+            onClose={() => setCommentsVisible(false)}
+            comments={comments}
+            onTabChange={(key) => setOrder(key)}
+            targetId={article._id}
+            onUpdate={forceUpdate}
+            to="article"
+          />
+        </MobileRender>
       </div>
     </div>
   )

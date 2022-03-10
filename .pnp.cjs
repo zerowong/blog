@@ -701,6 +701,29 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@tailwindcss/forms", [
+        ["npm:0.5.0", {
+          "packageLocation": "./.yarn/cache/@tailwindcss-forms-npm-0.5.0-d7cb4867e9-3e57584871.zip/node_modules/@tailwindcss/forms/",
+          "packageDependencies": [
+            ["@tailwindcss/forms", "npm:0.5.0"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:0.5.0", {
+          "packageLocation": "./.yarn/__virtual__/@tailwindcss-forms-virtual-0552dfa99f/0/cache/@tailwindcss-forms-npm-0.5.0-d7cb4867e9-3e57584871.zip/node_modules/@tailwindcss/forms/",
+          "packageDependencies": [
+            ["@tailwindcss/forms", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:0.5.0"],
+            ["@types/tailwindcss", null],
+            ["mini-svg-data-uri", "npm:1.4.4"],
+            ["tailwindcss", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:3.0.23"]
+          ],
+          "packagePeers": [
+            "@types/tailwindcss",
+            "tailwindcss"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@tailwindcss/line-clamp", [
         ["npm:0.3.1", {
           "packageLocation": "./.yarn/cache/@tailwindcss-line-clamp-npm-0.3.1-700becc5d8-805322a633.zip/node_modules/@tailwindcss/line-clamp/",
@@ -2103,6 +2126,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["client", "workspace:packages/client"],
             ["@headlessui/react", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:1.5.0"],
+            ["@tailwindcss/forms", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:0.5.0"],
             ["@tailwindcss/line-clamp", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:0.3.1"],
             ["@tailwindcss/typography", "virtual:658502eb4296e93abedc18b6aa9b26978f434f08d98e21ebb0e725354b8bb54b62db9c4a1893e460c694ff7500ff5cbafa4457b0dfd26b5838868666c861e990#npm:0.5.2"],
             ["@types/marked", "npm:4.0.2"],
@@ -4928,6 +4952,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "@types/react",
             "prop-types",
             "react"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["mini-svg-data-uri", [
+        ["npm:1.4.4", {
+          "packageLocation": "./.yarn/cache/mini-svg-data-uri-npm-1.4.4-929f6f1119-997f1fbd8d.zip/node_modules/mini-svg-data-uri/",
+          "packageDependencies": [
+            ["mini-svg-data-uri", "npm:1.4.4"]
           ],
           "linkType": "HARD",
         }]

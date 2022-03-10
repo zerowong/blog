@@ -21,9 +21,9 @@ export default function Profile() {
 
   return (
     <div>
-      <div className="h-[30vh] bg-gradient-to-br from-sky-500 to-fuchsia-500">
+      <div className="h-[250px] bg-gradient-to-br from-sky-500 to-fuchsia-500">
         <Button
-          className="absolute right-2 top-[23vh]"
+          className="absolute right-2 top-[240px]"
           onClick={() => {
             return history.push(Pages.settingProfile)
           }}

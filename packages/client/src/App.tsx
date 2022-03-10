@@ -1,11 +1,17 @@
 import { Suspense, lazy, StrictMode, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
-import { ToastContainer } from 'react-toastify'
-import { BottomBar, NavBar } from './views'
+// import { ToastContainer } from 'react-toastify'
+import {
+  BottomBar,
+  NavBar,
+  GlobalLoading,
+  GlobalMessage,
+  SliderLeft,
+  SliderRight,
+} from './views'
+import { Loading } from './components'
 import useStore from './store'
-import { useMatchMedia } from './hooks'
 import { Pages } from './utils/config'
-import { Loading, GlobalLoading, GlobalMessage } from './views'
 
 const Home = lazy(() => import('./pages/Home'))
 const Articles = lazy(() => import('./pages/Articles'))
@@ -17,58 +23,62 @@ const Register = lazy(() => import('./pages/Register'))
 const Profile = lazy(() => import('./pages/Profile'))
 const SettingProfile = lazy(() => import('./pages/SetttingProfile'))
 const Article = lazy(() => import('./pages/Article'))
+const Tweet = lazy(() => import('./pages/Tweet'))
 
 export default function App() {
-  const auth = useStore((state) => state.auth)
-  const user = useStore((state) => state.user)
+  const auth = useStore((s) => s.auth)
+  const user = useStore((s) => s.user)
+  const isDesktop = useStore((s) => s.isDesktop)
 
   useEffect(() => {
     auth()
   }, [auth])
 
-  const lg = useMatchMedia('(min-width: 1024px)')
-
   return (
     <StrictMode>
       <Router>
-        {!lg && <NavBar />}
-        <div className="lg:max-w-7xl lg:mx-auto h-screen">
-          <Suspense
-            /**
-             * @todo 顶部加载条
-             */
-            fallback={
-              <div className="h-full flex justify-center items-center">
-                <Loading />
-              </div>
-            }
-          >
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route path={Pages.articles} component={Articles} />
-              <Route path={Pages.search} component={Search} />
-              <Route path={Pages.about} component={About} />
-              <Route path={Pages.notification} component={Notification} />
-              <Route path={Pages.login}>{user ? <Redirect to="/" /> : <Login />}</Route>
-              <Route path={Pages.register}>
-                {user ? <Redirect to="/" /> : <Register />}
-              </Route>
-              <Route path={`${Pages.user}/:id`}>
-                {user ? <Profile /> : <Redirect to="/" />}
-              </Route>
-              <Route path={Pages.settingProfile}>
-                {user ? <SettingProfile /> : <Redirect to="/" />}
-              </Route>
-              <Route path={`${Pages.article}/:id`} component={Article} />
-              <Redirect to="/" />
-            </Switch>
-          </Suspense>
+        <div className="lg:flex lg:justify-center">
+          {isDesktop && <SliderLeft />}
+          <div className="lg:relative lg:border-x lg:w-[700px] min-h-[calc(100vh-49px)] lg:min-h-screen">
+            <NavBar />
+            <Suspense
+              /**
+               * @todo 顶部加载条
+               */
+              fallback={
+                <div className="h-full flex justify-center items-center">
+                  <Loading />
+                </div>
+              }
+            >
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route path={Pages.articles} component={Articles} />
+                <Route path={Pages.search} component={Search} />
+                <Route path={Pages.about} component={About} />
+                <Route path={Pages.notification} component={Notification} />
+                <Route path={Pages.login}>{user ? <Redirect to="/" /> : <Login />}</Route>
+                <Route path={Pages.register}>
+                  {user ? <Redirect to="/" /> : <Register />}
+                </Route>
+                <Route path={`${Pages.user}/:id`}>
+                  {user ? <Profile /> : <Redirect to="/" />}
+                </Route>
+                <Route path={Pages.settingProfile}>
+                  {user ? <SettingProfile /> : <Redirect to="/" />}
+                </Route>
+                <Route path={`${Pages.article}/:id`} component={Article} />
+                <Route path={`${Pages.tweet}/:id`} component={Tweet} />
+                <Redirect to="/" />
+              </Switch>
+            </Suspense>
+          </div>
+          {isDesktop ? <SliderRight /> : <BottomBar />}
         </div>
-        {!lg && <BottomBar />}
       </Router>
       <GlobalLoading />
       <GlobalMessage />
-      <ToastContainer
+      {/* <ToastContainer
         position="top-center"
         autoClose={2000}
         hideProgressBar
@@ -79,8 +89,8 @@ export default function App() {
         draggable
         pauseOnHover
         draggablePercent={50}
-        draggableDirection={lg ? 'x' : 'y'}
-      />
+        draggableDirection={isDesktop ? 'x' : 'y'}
+      /> */}
     </StrictMode>
   )
 }

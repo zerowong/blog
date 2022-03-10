@@ -1,12 +1,21 @@
 import { useState, useEffect } from 'react'
-import { PageContainer, AdminAccess } from '../views'
+import type { FormEventHandler } from 'react'
 import { ArticleService } from '../services'
 import type { Article } from '../typings'
-import { Image, Tabs, Drawer, IconFont } from '../components'
-import { format } from '../utils'
+import {
+  Tabs,
+  Drawer,
+  IconFont,
+  AdminRender,
+  MobileRender,
+  Label,
+  Input,
+} from '../components'
+import { format, formHelper } from '../utils'
 import { useHistory } from 'react-router-dom'
 import { Pages } from '../utils/config'
 import { useForceUpdate } from '../hooks'
+import { Button } from '@waterui/react'
 
 const orders = [
   { key: 'desc', text: '最新' },
@@ -30,9 +39,54 @@ export default function Articles() {
 
   const [newArticleDrawerVisible, setNewArticleDrawerVisible] = useState(false)
 
+  const addArticle: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault()
+    const values = await formHelper.getValues(e.target, ['title', 'content', 'cover'])
+    await ArticleService.add(values)
+    forceUpdate()
+    formHelper.reset(e.target)
+  }
+
   return (
-    <PageContainer>
-      <div className="flex justify-between items-center border-b-8 border-t px-5 py-2">
+    <div>
+      <MobileRender reverse>
+        <AdminRender>
+          <details className="border-t p-4 cursor-pointer">
+            <summary className="select-none text-sky-500">新增文章</summary>
+            <form className="px-5" onSubmit={addArticle}>
+              <Label htmlFor="title" requiredMark>
+                标题
+              </Label>
+              <Input
+                id="title"
+                name="title"
+                type="text"
+                required
+                className="block w-full"
+              />
+              <Label htmlFor="content" requiredMark>
+                MD文件
+              </Label>
+              <Input
+                id="content"
+                name="content"
+                type="file"
+                accept=".md"
+                className="block w-full"
+                required
+              />
+              <Label htmlFor="cover">封面</Label>
+              <Input id="cover" name="cover" type="url" className="block w-full" />
+              <div className="flex justify-end">
+                <Button type="submit" className="w-32">
+                  提交
+                </Button>
+              </div>
+            </form>
+          </details>
+        </AdminRender>
+      </MobileRender>
+      <div className="flex justify-between items-center border-b-8 lg:border-b border-t px-5 py-2">
         <span>
           <span className="font-bold">{articles.length}</span> 篇
         </span>
@@ -48,25 +102,27 @@ export default function Articles() {
           </Tabs>
         </span>
       </div>
-      <div className="divide-y-8">
+      <div className="divide-y-8 lg:divide-y">
         {articles.map((article) => {
           return (
             <div
               key={article._id}
-              className="px-5 py-2 w-full"
+              className="px-5 py-2 w-full lg:cursor-pointer lg:transition-colors lg:hover:bg-gray-100"
               onClick={() => history.push(`${Pages.article}/${article._id}`)}
             >
-              <header className="font-bold text-xl py-1">{article.title}</header>
-              <div className="flex">
+              <div className="font-bold text-xl lg:text-2xl py-1 select-none">
+                {article.title}
+              </div>
+              <div className="flex space-x-2">
                 {article.cover && (
-                  <Image
+                  <img
                     src={article.cover}
-                    width={100}
-                    height={72}
-                    className="rounded-lg mr-2"
+                    className="rounded-lg w-[100px] h-[72px] lg:w-[200px] lg:h-[144px] border"
                   />
                 )}
-                <div className="text-slate-500 line-clamp-3">{article.content}</div>
+                <div className="text-slate-500 line-clamp-3 lg:line-clamp-6 select-none">
+                  {article.content}
+                </div>
               </div>
               <div className="pt-1 text-slate-500">
                 {format.relativeTime(article.createdAt)}
@@ -75,53 +131,36 @@ export default function Articles() {
           )
         })}
       </div>
-      <AdminAccess>
-        <button
-          className="btn btn-circle fixed right-5 bottom-20"
-          onClick={() => setNewArticleDrawerVisible(true)}
-        >
-          <IconFont name="modify" />
-        </button>
-        <Drawer
-          visible={newArticleDrawerVisible}
-          onClose={() => setNewArticleDrawerVisible(false)}
-          placement="bottom"
-          title="添加文章"
-        >
-          <form
-            onSubmit={async (e) => {
-              e.preventDefault()
-              const values: Record<string, string> = {}
-              const formData = new FormData(e.currentTarget)
-              for (const [name, value] of formData) {
-                if (value instanceof File) {
-                  const content = await value.text()
-                  values[name] = content
-                } else {
-                  values[name] = value
-                }
-              }
-              try {
-                // @ts-ignore
-                await ArticleService.add(values)
-                forceUpdate()
-              } catch {}
-            }}
+      <MobileRender>
+        <AdminRender>
+          <button
+            className="btn btn-circle fixed right-5 bottom-20"
+            onClick={() => setNewArticleDrawerVisible(true)}
           >
-            <div>
-              <label htmlFor="title">标题: </label>
-              <input id="title" name="title" type="text" className="border" />
-            </div>
-            <div>
-              <label htmlFor="content">MD文件: </label>
-              <input id="content" name="content" type="file" accept=".md" />
-            </div>
-            <button type="submit" className="border p-2 shadow">
-              提交
-            </button>
-          </form>
-        </Drawer>
-      </AdminAccess>
-    </PageContainer>
+            <IconFont name="modify" />
+          </button>
+          <Drawer
+            visible={newArticleDrawerVisible}
+            onClose={() => setNewArticleDrawerVisible(false)}
+            placement="bottom"
+            title="添加文章"
+          >
+            <form onSubmit={addArticle}>
+              <div>
+                <label htmlFor="title">标题: </label>
+                <input id="title" name="title" type="text" className="border" />
+              </div>
+              <div>
+                <label htmlFor="content">MD文件: </label>
+                <input id="content" name="content" type="file" accept=".md" />
+              </div>
+              <button type="submit" className="border p-2 shadow">
+                提交
+              </button>
+            </form>
+          </Drawer>
+        </AdminRender>
+      </MobileRender>
+    </div>
   )
 }

@@ -1,21 +1,20 @@
 import { useState, useRef } from 'react'
 import type { ChangeEvent } from 'react'
-import { Drawer, Tabs, Avatar, Input } from '../components'
-import { format } from '../utils'
+import { Tabs, Avatar, Input } from '../components'
+import { format, formHelper } from '../utils'
 import type { Comment, User } from '../typings'
 import useSotre from '../store'
 import { CommentService } from '../services'
 import { Button } from '@waterui/react'
 
-interface CommentsDrawerProps {
-  visible: boolean
-  onClose: () => void
+interface CommentsProps {
   comments: Comment[]
   onTabChange: (key: 'desc' | 'asc') => void
   loading?: boolean
   targetId: string
   onUpdate?: () => void
   to: 'article' | 'tweet'
+  className?: string
 }
 
 const orders = [
@@ -23,12 +22,8 @@ const orders = [
   { key: 'asc', text: '倒序' },
 ] as const
 
-/**
- * 移动端
- */
-export function CommentsDrawer(props: CommentsDrawerProps) {
-  const { visible, onClose, comments, onTabChange, targetId, onUpdate, to, loading } =
-    props
+export function Comments(props: CommentsProps) {
+  const { comments, onTabChange, targetId, onUpdate, to, loading, className } = props
 
   const user = useSotre((s) => s.user)
   const showMessage = useSotre((s) => s.setGlobalMessage)
@@ -36,21 +31,19 @@ export function CommentsDrawer(props: CommentsDrawerProps) {
   const [replyTo, setReplyTo] = useState<User | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [submitLoading, setSubmitLoading] = useState(false)
-  const drawerRef = useRef<HTMLDivElement>(null)
 
-  const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!user) {
       return showMessage('未登录')
     }
-    const formData = new FormData(e.target)
-    const content = formData.get('content')
-    if (!content || typeof content !== 'string') {
+    const values: { content: string } = await formHelper.getValues(e.target, ['content'])
+    if (!values.content) {
       return
     }
     setSubmitLoading(true)
     const data = {
-      content,
+      content: values.content,
       replyTo: replyTo?._id ?? undefined,
     }
     let promise: Promise<Comment> | null = null
@@ -70,24 +63,15 @@ export function CommentsDrawer(props: CommentsDrawerProps) {
       return promise
         .then(() => {
           onUpdate?.()
-          ;(e.target[0] as HTMLInputElement).value = ''
-          drawerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+          formHelper.reset(e.target)
         })
         .finally(() => setSubmitLoading(false))
     }
   }
 
   return (
-    <Drawer
-      visible={visible}
-      onClose={onClose}
-      height="90vh"
-      placement="bottom"
-      title="全部评论"
-      containerClassName="rounded-lg"
-      ref={drawerRef}
-    >
-      <div className="flex justify-between items-center px-2">
+    <div className={className}>
+      <div className="flex justify-between items-center px-3 sticky top-0 bg-white z-10">
         <span>{comments.length} 评论</span>
         <span>
           <Tabs
@@ -101,38 +85,41 @@ export function CommentsDrawer(props: CommentsDrawerProps) {
           </Tabs>
         </span>
       </div>
-      <div className="px-2 pb-2">
+      <div className="px-3 pb-2">
         {comments.map((item) => {
           return (
-            <div
-              key={item._id}
-              className="flex gap-x-2 py-1"
-              onClick={() => {
-                if (inputRef.current) {
-                  inputRef.current.focus()
-                  setReplyTo(item.user)
-                }
-              }}
-            >
+            <div key={item._id} className="flex gap-x-2 py-1 group">
               <div>
                 <Avatar
                   src={item.user.avatar}
                   text={item.user.avatar ? undefined : item.user.name}
+                  size="large"
                 />
               </div>
               <div className="space-y-1">
-                <div className="font-bold space-x-1">
+                <div className="font-bold text-lg space-x-1">
                   <span>{item.user.name}</span>
                   {item.replyTo && (
                     <>
-                      <span className="text-slate-500">➤</span>
+                      <span className="text-slate-500 select-none">➤</span>
                       <span>{item.replyTo.name}</span>
                     </>
                   )}
                 </div>
                 <div>{item.content}</div>
-                <div className="text-xs text-slate-500">
-                  {format.relativeTime(item.createdAt)}
+                <div className="text-xs lg:text-base text-slate-500 space-x-3">
+                  <span>{format.relativeTime(item.createdAt)}</span>
+                  <span
+                    className="opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer duration-500"
+                    onClick={() => {
+                      if (inputRef.current) {
+                        inputRef.current.focus()
+                        setReplyTo(item.user)
+                      }
+                    }}
+                  >
+                    回复
+                  </span>
                 </div>
               </div>
             </div>
@@ -140,7 +127,7 @@ export function CommentsDrawer(props: CommentsDrawerProps) {
         })}
       </div>
       <form
-        className="fixed bottom-0 h-12 inset-x-0 pl-3 border-t flex bg-white items-center gap-x-2"
+        className="sticky bottom-0 h-14 inset-x-0 px-3 pt-2 flex bg-white items-center gap-1"
         onSubmit={onSubmit}
         onBlur={(e) => {
           if (!e.relatedTarget) {
@@ -155,10 +142,10 @@ export function CommentsDrawer(props: CommentsDrawerProps) {
           type="text"
           placeholder={replyTo ? `回复 @${replyTo.name}` : '评论'}
         />
-        <Button type="submit" className="" disabled={submitLoading}>
+        <Button type="submit" disabled={submitLoading}>
           发布
         </Button>
       </form>
-    </Drawer>
+    </div>
   )
 }

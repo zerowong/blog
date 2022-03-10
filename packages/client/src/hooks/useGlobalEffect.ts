@@ -15,5 +15,5 @@ export function useGlobalEffect() {
     } else {
       document.title = `${title} - ApassEr`
     }
-  }, [location, setNavTitle])
+  }, [location.pathname, setNavTitle])
 }

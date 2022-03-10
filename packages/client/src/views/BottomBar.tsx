@@ -7,8 +7,8 @@ import { Pages, shouldHideBottomBar } from '../utils/config'
 const actions = [
   { to: Pages.home },
   { to: Pages.articles },
-  { to: Pages.search },
-  { to: Pages.notification },
+  // { to: Pages.search },
+  // { to: Pages.notification },
 ]
 
 const actionStyles = [
@@ -43,7 +43,7 @@ const actionStyles = [
  */
 export function BottomBar() {
   const location = useLocation()
-  const isHideSelf = useMemo(
+  const isHide = useMemo(
     () => shouldHideBottomBar(location.pathname),
     [location.pathname]
   )
@@ -51,8 +51,8 @@ export function BottomBar() {
   return (
     <div
       className={classNames(
-        'fixed bottom-0 inset-x-0 justify-center gap-x-10 py-[2px] border-t border-gray-100 bg-white',
-        isHideSelf ? 'hidden' : 'flex'
+        'sticky bottom-0 inset-x-0 justify-center gap-x-10 border-t border-gray-100 bg-white',
+        isHide ? 'hidden' : 'flex'
       )}
     >
       {actions.map((item, index) => {

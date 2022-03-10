@@ -1,9 +1,6 @@
-/**
- * 关于
- */
 export default function About() {
   return (
-    <div className="h-screen w-screen flex justify-center items-center bg-gradient-to-br from-sky-500 to-fuchsia-500">
+    <div className="h-[calc(100vh-48px)] w-screen flex justify-center items-center bg-gradient-to-br from-sky-500 to-fuchsia-500">
       <div className="h-[60vh] w-[70vw] rounded-xl shadow-md bg-white/70 flex justify-center items-center">
         <div className="text-center text-xl space-y-2">
           <header className="mb-16">一个无业游民</header>

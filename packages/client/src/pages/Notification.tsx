@@ -1,6 +1,3 @@
-/**
- * 主页
- */
 export default function Notification() {
-  return <div>Notification</div>
+  return <div className="h-full">...</div>
 }

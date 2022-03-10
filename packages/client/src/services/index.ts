@@ -87,6 +87,9 @@ export const TweetService = {
     const qs = handleQuery(query)
     return request.get<Tweet[]>(`/tweet${qs}`)
   },
+  getById(id: string) {
+    return request.get<Tweet>(`/tweet/${id}`)
+  },
   update(id: string, data: Partial<Pick<Tweet, 'content'>>) {
     return request.patch<Tweet>(`/tweet/${id}`, data)
   },

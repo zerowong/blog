@@ -3,17 +3,12 @@
 @tailwind utilities;
 
 .iconfont {
-  /* width: 1em;
-  height: 1em;
-  vertical-align: -0.15em; */
   fill: currentColor;
   overflow: hidden;
 }
 
 :root {
-  --blog-nav-height: 48px;
-  --blog-bottom-height: 53px;
-  --blog-nav-zindex: 10;
-  --blog-drawer-zindex: 11;
-  --blog-global-zindex: 12;
+  --blog-nav-zindex: 50;
+  --blog-drawer-zindex: 51;
+  --blog-global-zindex: 52;
 }

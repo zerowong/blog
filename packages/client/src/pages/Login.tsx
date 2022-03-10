@@ -1,8 +1,7 @@
 import { Brand } from '../views'
 import { useFormik } from 'formik'
-import { Button, Input } from '@waterui/react'
-import { ErrorMessage, Label } from '../components'
-import classNames from 'classnames'
+import { Button } from '@waterui/react'
+import { ErrorMessage, Label, Input } from '../components'
 import { PassportService } from '../services'
 import useStore from '../store'
 import { useHistory } from 'react-router-dom'
@@ -55,51 +54,46 @@ export default function Login() {
   const passError = formik.touched.pass && !!formik.errors.pass
 
   return (
-    <div className="w-[70vw] mx-auto py-[20vh]">
-      <Brand className="text-center block mb-20" size="large" />
-      <form onSubmit={formik.handleSubmit}>
-        <div>
-          <Label htmlFor="name" requiredMark>
-            昵称
-          </Label>
-          <Input
-            id="name"
-            type="text"
-            clearable
-            wrapperClassName={classNames('shadow-sm focus-within:bg-gray-100', {
-              'border-red-500': nameError,
-            })}
-            maxLength={30}
-            {...formik.getFieldProps('name')}
-            onClear={() => formik.setFieldValue('name', '')}
-            borderColor={nameError ? 'red' : undefined}
-            className="focus:bg-gray-100"
-          />
-          <ErrorMessage show={nameError} value={formik.errors.name} />
-        </div>
-        <div>
-          <Label htmlFor="pass" requiredMark>
-            密码
-          </Label>
-          <Input
-            id="pass"
-            type="password"
-            wrapperClassName={classNames('shadow-sm focus-within:bg-gray-100', {
-              'border-red-500': passError,
-            })}
-            maxLength={30}
-            {...formik.getFieldProps('pass')}
-            borderColor={passError ? 'red' : undefined}
-            className="focus:bg-gray-100"
-          />
-          <ErrorMessage show={passError} value={formik.errors.pass} />
-        </div>
-        <div>
-          <Button block type="submit" disabled={loading}>
-            登录
-          </Button>
-        </div>
-      </form>
+    <div className="h-[calc(100vh-48px)] flex items-center justify-center">
+      <div className="w-full px-12 lg:px-24">
+        <Brand
+          className="text-center block mb-16 lg:mb-0 lg:text-7xl lg:absolute lg:top-[20vh] lg:left-[calc(50%-137px)]"
+          size="large"
+        />
+        <form onSubmit={formik.handleSubmit}>
+          <div>
+            <Label htmlFor="name" block className="text-slate-500">
+              昵称
+            </Label>
+            <Input
+              id="name"
+              type="text"
+              maxLength={30}
+              {...formik.getFieldProps('name')}
+              className="w-full"
+            />
+            <ErrorMessage show={nameError} value={formik.errors.name} />
+          </div>
+          <div>
+            <Label htmlFor="pass" block className="text-slate-500">
+              密码
+            </Label>
+            <Input
+              id="pass"
+              type="password"
+              maxLength={30}
+              {...formik.getFieldProps('pass')}
+              className="w-full"
+            />
+            <ErrorMessage show={passError} value={formik.errors.pass} />
+          </div>
+          <div>
+            <Button block type="submit" disabled={loading}>
+              登录
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

@@ -21,7 +21,10 @@ export function GlobalMessage() {
   }, [message.value, setMessage])
 
   return (
-    <div className="fixed inset-0 overflow-hidden flex justify-center items-center pointer-events-none z-[var(--blog-global-zindex)]">
+    <div
+      className="fixed inset-0 overflow-hidden flex justify-center items-center pointer-events-none z-[var(--blog-global-zindex)]"
+      role="dialog"
+    >
       <Transition
         show={!!message.value}
         unmount={false}

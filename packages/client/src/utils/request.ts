@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify'
+import useStore from '../store'
 
 interface Config {
   baseURL: string
@@ -36,9 +36,11 @@ class MyRequest {
 
   private errorHandler(reason: unknown) {
     if (reason instanceof Response) {
-      reason.text().then((value) => toast.error(value))
+      reason
+        .text()
+        .then((value) => useStore.setState({ globalMessage: { value, type: 'error' } }))
     } else if (reason instanceof TypeError) {
-      toast.error('网络错误/服务挂了')
+      useStore.setState({ globalMessage: { value: '网络错误/服务挂了', type: 'error' } })
     }
   }
 

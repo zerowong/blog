@@ -18,6 +18,8 @@ interface State {
   setNavTitle(arg: string): void
   globalMessage: Message
   setGlobalMessage(value: string, type?: Message['type']): void
+  isDesktop: boolean
+  setIsDesktop(arg: boolean): void
 }
 
 const useStore = create<State>(
@@ -46,6 +48,10 @@ const useStore = create<State>(
     globalMessage: { value: '', type: 'info' },
     setGlobalMessage(value, type = 'error') {
       return set({ globalMessage: { value, type } })
+    },
+    isDesktop: window.matchMedia('(min-width: 1024px)').matches,
+    setIsDesktop(arg) {
+      return set({ isDesktop: arg })
     },
   }))
 )

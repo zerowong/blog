@@ -12,7 +12,7 @@ interface DrawerProps {
   height?: number | string
   children?: ReactNode
   title?: string
-  bodyClassName?: string
+  className?: string
   containerClassName?: string
 }
 
@@ -60,7 +60,7 @@ function _Drawer(props: DrawerProps, ref: ForwardedRef<HTMLDivElement>) {
     height,
     title,
     children,
-    bodyClassName,
+    className,
     containerClassName,
   } = props
 
@@ -77,9 +77,8 @@ function _Drawer(props: DrawerProps, ref: ForwardedRef<HTMLDivElement>) {
   return (
     <Transition.Root show={visible} as={Fragment}>
       <Dialog
-        as="div"
         className="fixed inset-0 overflow-hidden z-[var(--blog-drawer-zindex)]"
-        onClose={() => onClose()}
+        onClose={onClose}
       >
         <Transition.Child
           as={Fragment}
@@ -111,20 +110,20 @@ function _Drawer(props: DrawerProps, ref: ForwardedRef<HTMLDivElement>) {
               style={{ height: _height, width: _width }}
             >
               <div className="flex justify-between items-center py-4 px-5 border-b">
-                <Dialog.Title className="text-lg font-bold text-gray-900">
+                <Dialog.Title className="text-lg font-bold">
                   {title}
                 </Dialog.Title>
                 <button
                   onClick={onClose}
                   className="btn btn-circle btn-ghost btn-active btn-sm"
                 >
-                  <IconFont name="close" className="text-2xl text-black" />
+                  <IconFont name="close" className="text-2x" />
                 </button>
               </div>
               <div
                 className={classNames(
                   'relative overflow-y-scroll h-[calc(100%-60px)]',
-                  bodyClassName
+                  className
                 )}
                 ref={ref}
               >

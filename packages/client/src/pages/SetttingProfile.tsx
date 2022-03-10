@@ -1,9 +1,8 @@
 import { useState, useRef } from 'react'
 import type { ChangeEvent } from 'react'
 import { useFormik } from 'formik'
-import { Button, Input } from '@waterui/react'
-import { ErrorMessage, Label, Avatar, IconFont } from '../components'
-import classNames from 'classnames'
+import { Button } from '@waterui/react'
+import { ErrorMessage, Label, Avatar, IconFont, Input } from '../components'
 import useStore from '../store'
 import { useHistory } from 'react-router-dom'
 import { useCos, useGlobalLoading } from '../hooks'
@@ -97,7 +96,7 @@ export default function SettingProfile() {
 
   return (
     <div>
-      <div className="h-[30vh] bg-gradient-to-br from-sky-500 to-fuchsia-500"></div>
+      <div className="h-[250px] bg-gradient-to-br from-sky-500 to-fuchsia-500"></div>
       <div className="pl-8 relative">
         <Avatar
           src={src}
@@ -125,19 +124,15 @@ export default function SettingProfile() {
       </div>
       <form onSubmit={formik.handleSubmit} className="px-8">
         <div>
-          <Label htmlFor="name">昵称</Label>
+          <Label htmlFor="name" block>
+            昵称
+          </Label>
           <Input
             id="name"
             type="text"
-            clearable
-            wrapperClassName={classNames('shadow-sm focus-within:bg-gray-100', {
-              'border-red-500': nameError,
-            })}
             maxLength={30}
             {...formik.getFieldProps('name')}
-            onClear={() => formik.setFieldValue('name', '')}
-            borderColor={nameError ? 'red' : undefined}
-            className="focus:bg-gray-100"
+            className="w-full"
             placeholder="新昵称"
           />
           <ErrorMessage show={nameError} value={formik.errors.name} />

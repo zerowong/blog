@@ -9,6 +9,7 @@ export const enum Pages {
   user = '/user',
   settingProfile = '/setting-profile',
   article = '/article',
+  tweet = '/tweet',
 }
 
 export const titleMap = new Map<string, string>([
@@ -31,6 +32,8 @@ const showLeftArrowPaths: Path[] = [
   new RegExp(`^${Pages.user}/\\w+$`),
   new RegExp(`^${Pages.article}/\\w+$`),
   Pages.about,
+  Pages.tweet,
+  new RegExp(`^${Pages.tweet}/\\w+$`),
 ]
 
 function checkPath(path: string, paths: Path[]) {
@@ -55,8 +58,10 @@ export function shouldShowLeftArrow(path: string) {
 const hideBottomBarPaths: Path[] = [
   Pages.login,
   Pages.register,
+  new RegExp(`^${Pages.user}/\\w+$`),
   new RegExp(`^${Pages.article}/\\w+$`),
   Pages.about,
+  Pages.settingProfile,
 ]
 
 export function shouldHideBottomBar(path: string) {

@@ -5,12 +5,12 @@ interface AdminAccessProps {
   children: ReactNode
 }
 
-export function AdminAccess(props: AdminAccessProps) {
+export function AdminRender(props: AdminAccessProps) {
   const user = useStore((s) => s.user)
 
-  if (!user?.isAdmin) {
-    return null
+  if (user?.isAdmin) {
+    return <>{props.children}</>
   }
 
-  return <>{props.children}</>
+  return null
 }

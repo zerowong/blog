@@ -9,7 +9,10 @@ export function GlobalLoading() {
   const loading = useStore((s) => s.globalLoading)
 
   return (
-    <div className="fixed inset-0 overflow-hidden flex justify-center items-center pointer-events-none z-[var(--blog-global-zindex)]">
+    <div
+      className="fixed inset-0 overflow-hidden flex justify-center items-center pointer-events-none z-[var(--blog-global-zindex)]"
+      role="dialog"
+    >
       <Transition
         show={loading}
         unmount={false}

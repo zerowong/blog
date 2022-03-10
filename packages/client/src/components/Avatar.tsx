@@ -12,7 +12,7 @@ interface AvatarProps extends ComponentProps<'img'> {
    * 大小, 长 x 宽
    */
   size?: 'small' | 'medium' | 'large' | number
-  feedback?: JSX.Element
+  fallback?: JSX.Element
   text?: string
   containerClassName?: string
 }
@@ -29,7 +29,7 @@ export function Avatar(props: AvatarProps) {
     size = 'medium',
     onError,
     src,
-    feedback,
+    fallback,
     text,
     containerClassName,
     ...rest
@@ -43,14 +43,14 @@ export function Avatar(props: AvatarProps) {
   }, [src])
 
   const _onError = (e: SyntheticEvent<HTMLImageElement>) => {
-    if (feedback) {
+    if (fallback) {
       setIsLoadError(true)
     }
     onError?.(e)
   }
 
-  if (feedback && (isLoadError || !src)) {
-    return feedback
+  if (fallback && (isLoadError || !src)) {
+    return fallback
   }
 
   const isTextMode = text !== undefined && text !== null

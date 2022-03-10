@@ -37,3 +37,37 @@ export function getExt(fileName: string) {
 export function hasProp(obj: unknown, key: string) {
   return Object.prototype.hasOwnProperty.call(obj, key)
 }
+
+export const formHelper = {
+  async getValues(target: EventTarget | HTMLFormElement, names: string[]) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const obj: any = {}
+    if (!(target instanceof HTMLFormElement)) {
+      return obj
+    }
+    const formData = new FormData(target)
+    for (const name of names) {
+      const value = formData.get(name)
+      if (!value) {
+        continue
+      }
+      if (value instanceof File) {
+        obj[name] = await value.text()
+      } else {
+        obj[name] = value
+      }
+    }
+    return obj
+  },
+  reset(target: EventTarget | HTMLFormElement) {
+    if (target instanceof HTMLFormElement) {
+      const inputs = target.querySelectorAll('input')
+      inputs.forEach((item) => {
+        if (item.type === 'file') {
+          return
+        }
+        item.value = ''
+      })
+    }
+  },
+}
