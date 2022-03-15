@@ -10,6 +10,7 @@ import { CommentsDrawer } from '../views'
 import useStore from '../store'
 import { Button, Form, TextArea } from '@waterui/react'
 import type { FormValues } from '@waterui/react'
+import { marked } from 'marked'
 
 type Timeline = Article | Tweet
 type Order = 'desc' | 'asc'
@@ -167,7 +168,10 @@ export default function Home() {
                   setShowComments(true)
                 }}
               >
-                <div>{item.content}</div>
+                <div
+                  className="prose lg:prose-lg overflow-x-clip break-all"
+                  dangerouslySetInnerHTML={{ __html: marked(item.content) }}
+                />
                 <div className="text-slate-500">
                   <IconFont name="replies" size={20} />
                   <span className="text-sm ml-2 align-bottom">
